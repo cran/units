@@ -1,0 +1,16 @@
+a5f611c1d051284433e094406c027ff0 *DESCRIPTION
+e513d519a7ecfabbc66e02aed2948dc9 *NAMESPACE
+8d3face79a507bc1b79aa1c022aa5162 *R/arith.R
+71a175c0ffdde2ad8c21c353f6a795c0 *build/vignette.rds
+b36810a37437f4545c8116f085a33a6d *inst/doc/units.R
+9e3c9dac4947e41adac40c5e1add185a *inst/doc/units.Rmd
+3741f22c4377ea8a727dd055e24da5a5 *inst/doc/units.html
+ac3f6766a1020f32ec4cb84145c35c75 *man/Math.units.Rd
+50b75f2a9ab069707027777c5404b325 *man/Ops.units.Rd
+5f89687babbaef4ff717f658eb13f46e *man/as.dt.Rd
+1d080a2b27246daac99ab437e1e23734 *man/as.units.Rd
+50ad523593126ac3afd718edf5c43331 *man/as.units.difftime.Rd
+df8901a1ab9392121fb244686cf4a6e1 *man/units-set-.numeric.Rd
+8cdb46b70332777ba41a050a905c514f *man/units.Rd
+4616730f79793a3421e2ab6dd1b7638f *man/units.units.Rd
+9e3c9dac4947e41adac40c5e1add185a *vignettes/units.Rmd
