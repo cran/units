@@ -1,9 +1,9 @@
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Spatial and spatio-temporal objects in Google charts}
+%\VignetteIndexEntry{Measurement Units of Physical Quantities for R Vectors}
 -->
 
-# Physical units in R
+# Measurement Units of Physical Quantities for R Vectors
 
 R has little support for physical measurement units.  The exception
 is formed by time differences: time differences objects of class
@@ -55,7 +55,7 @@ b
 Impossible conversions lead to an error:
 ```{r}
 x = try(units(a) <- "secs")
-x
+attr(x, "condition")[[1]]
 ```
 
 ## Basic manipulations
@@ -85,13 +85,14 @@ Allowed operations that require convertable units are `+`, `-`, `==`,
 ### Mathematical functions
 
 Mathematical operations allowed are: `abs`, `sign`, `floor`,
-`ceiling`, `trunc`, `round`, `signif`, `cumsum`, `cummax`, `cummin`.
+`ceiling`, `trunc`, `round`, `signif`, `log`, `cumsum`, `cummax`, `cummin`.
 ```{r}
 signif(a^2.5, 3)
 cumsum(a)
+log(a) # base defaults to exp(1)
+log(a, base = 10)
+log(a, base = 2)
 ```
-(for reasons beyond my comprehension, here `cumsum` strips units,
-but `signif` does not)
 
 ### Summary functions
 Summary functions `sum`, `min`, `max`, and `range` are allowed:

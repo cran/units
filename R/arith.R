@@ -79,6 +79,13 @@ as.units.default = function(x, value = "1") {
 	x
 }
 
+.as.units = function(x, value) {
+	x = unclass(x)
+	class(x) = "units"
+	attr(x, "units") = value
+	x
+}
+
 #' convert difftime objects to units
 #'
 #' @param x object of class units
@@ -163,20 +170,35 @@ Ops.units <- function(e1, e2) {
 #' @export
 #' 
 #' @examples
-#' a = sqrt(1:3)
+#' a = sqrt(1:10)
 #' units(a) = "m/s"
 #' log(a)
+#' log(a, base = 10)
 #' cumsum(a)
 #' signif(a, 2)
-Math.units = function(x,...) {
-    OK <- switch(.Generic, "abs" = , "sign" = , "floor" = , "ceiling" = , 
+Math.units = function(x, ...) {
+    OK <- switch(.Generic, "abs" = , "sign" = , "floor" = , "ceiling" = , "log" =,
 		"trunc" = , "round" = , "signif" = , "cumsum" = , "cummax" = , "cummin" = TRUE, FALSE)
 	if (!OK) {
 		warning(paste("Operation", .Generic, "not meaningful for units"))
 		x = unclass(x)
 		attr(x, "units") = NULL
+    	NextMethod(.Generic)
+	} else {
+		if (.Generic == "log") {
+			dts = list(...)
+			if (length(dts) == 0 || dts$base == exp(1))
+				u = paste0("ln(",units(x),")")
+			else if (dts$base == 10)
+				u = paste0("lg(",units(x),")")
+			else if (dts$base == 2)
+				u = paste0("lb(",units(x),")")
+			else
+				stop(paste("log with base", dts$base, "not supported"))
+    		.as.units(NextMethod(.Generic), u)
+		} else
+    		.as.units(NextMethod(.Generic), units(x))
 	}
-    NextMethod(.Generic)
 }
 
 #' @export
@@ -188,8 +210,13 @@ Summary.units = function(..., na.rm = FALSE) {
 	args = list(...)
 	u = units(args[[1]])
 	if (length(args) > 1)
-		for (i in 2:length(args))
+		for (i in 2:length(args)) {
+			if (!inherits(args[[i]], "units"))
+				stop(paste("argument", i, "is not of class units"))
+			if (!ud.are.convertible(units(args[[i]]), u))
+				stop(paste("argument", i, "has units that are not convertible to that of the first argument"))
 			args[[i]] = as.units(args[[i]], u) # convert to first unit
+		}
 	args = lapply(args, unclass)
 	as.units(do.call(.Generic, args), u)
 }
@@ -202,8 +229,12 @@ print.units <- function (x, digits = getOption("digits"), ...)
         y <- unclass(x)
         attr(y, "units") <- NULL
         print(y)
-    }
-    else cat(format(unclass(x), digits = digits), " ", attr(x, "units"), "\n", sep = "")
+    } else { 
+		u = attr(x, "units")
+		if (u == "1")
+			u = "(Units: 1)"
+		cat(format(unclass(x), digits = digits), " ", u, "\n", sep = "")
+	}
     invisible(x)
 }
 
@@ -223,11 +254,17 @@ weighted.mean.units <- function (x, w, ...)
 #' @export
 c.units <- function (..., recursive = FALSE) {
     args <- list(...)
+	u = units(args[[1]])
 	if (length(args) > 1)
-		for (i in 2:length(args))
-			units(args[[i]]) = units(args[[1]])
+		for (i in 2:length(args)) {
+			if (!inherits(args[[i]], "units"))
+				stop(paste("argument", i, "is not of class units"))
+			if (!ud.are.convertible(units(args[[i]]), u))
+				stop(paste("argument", i, "has units that are not convertible to that of the first argument"))
+			units(args[[i]]) = u
+		}
 	x = unlist(args)
-	as.units(x, units(args[[1]]))
+	as.units(x, u)
 }
 
 #' @export
@@ -262,4 +299,24 @@ as.dt = function(x) {
 		as.difftime(x, units = "days")
 	else
 		stop(paste("cannot convert unit", u, "to difftime object"))
+}
+
+#' @export
+mean.units = function(x, ...) {
+	.as.units(mean(unclass(x), ...), units(x))
+}
+
+#' @export
+median.units = function(x, na.rm = FALSE) {
+	.as.units(median(unclass(x), na.rm = na.rm), units(x))
+}
+
+#' @export
+quantile.units = function(x, ...) {
+	.as.units(quantile(unclass(x), ...), units(x))
+}
+
+#' @export
+format.units = function (x, ...) {
+	paste(format(unclass(x), ...), units(x))
 }
