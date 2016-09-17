@@ -2,24 +2,31 @@
 % Please edit documentation in R/arith.R
 \name{Ops.units}
 \alias{Ops.units}
-\title{Title}
+\title{S3 Ops Group Generic Functions for units objects}
 \usage{
 \method{Ops}{units}(e1, e2)
 }
 \arguments{
-\item{e1}{object of class \code{units}, or something that can be coerced to it by \code{as.units(e1)}}
+\item{e1}{object of class \code{units}, 
+or something that can be coerced to it by \code{as.units(e1)}}
 
-\item{e2}{object of class \code{units}, or something that can be coerced to it by \code{as.units(e2)}}
+\item{e2}{object of class \code{units}, 
+or something that can be coerced to it by \code{as.units(e2)}}
 }
 \value{
 object of class \code{units}
 }
 \description{
-Title
+Ops functions for units objects, including comparison, product and divide, add, subtract
 }
 \examples{
-a = as.units(1:3, "m/s")
-b = as.units(1:3, "m/s")
+a <- with(ud_units, 1:3 * m/s)
+b <- with(ud_units, 1:3 * m/s)
+a + b
+a * b
+a / b
+a <- make_unit("kg m-3") # not understood by R as a division, but understood by udunits2
+b <- with(ud_units, 1 * kg/m/m/m)
 a + b
 }
 

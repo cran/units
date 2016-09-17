@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Measurement Units of Physical Quantities for R Vectors</title>
+<title>Units of Measurement for R Vectors: an Introduction</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -203,10 +203,10 @@ hr {
 <body>
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Measurement Units of Physical Quantities for R Vectors}
+%\VignetteIndexEntry{Units of Measurement for R Vectors: an Introduction}
 -->
 
-<h1>Measurement Units of Physical Quantities for R Vectors</h1>
+<h1>Units of Measurement for R Vectors: an Introduction</h1>
 
 <p>R has little support for physical measurement units.  The exception
 is formed by time differences: time differences objects of class
@@ -240,8 +240,8 @@ d
 <pre><code>## Time difference of 3600 secs
 </code></pre>
 
-<p>We see here that the <code>units</code> method is used to set and modify the
-unit of time difference. </p>
+<p>We see here that the <code>units</code> method is used to retrieve and modify the
+unit of time differences. </p>
 
 <p>This idea can be generalized to other physical units. The
 <code>units</code> package, presented here, does this, and builds upon the
@@ -252,47 +252,81 @@ The <code>udunits2</code> library provides the following operations:</p>
 
 <ul>
 <li>validating whether a string, such as <code>m/s</code> is a valid physical unit</li>
-<li>verifying whether two strings such as <code>m/s</code> and <code>km/h</code> are convertable</li>
-<li>converting values between two convertable units </li>
+<li>verifying whether two strings such as <code>m/s</code> and <code>km/h</code> are convertible</li>
+<li>converting values between two convertible units </li>
 <li>providing names and symbols for specific units</li>
 <li>handle different character encodings (utf8, ascii, iso-8859-1 and latin1)</li>
 </ul>
 
-<p>This R package, called <code>units</code>, uses R package udunits2 to extend
+<p>Th <code>units</code> R package uses R package udunits2 to extend
 R with functionality for manipulating numeric vectors that have
 physical measurement units associated with them, in a similar way as
 <code>difftime</code> objects behave.</p>
 
 <h2>Setting units, unit conversion</h2>
 
-<p>Numeric data with explicit physical units can be specified by <code>as.units</code>:</p>
+<p>Units must be defined before they are used. Units are defined from a string but by explicitly defining units before they are used we avoid having new units in use due to misspellings. A unit is defined using the <code>make_units</code> function</p>
 
 <pre><code class="r">library(units)
-(a = as.units(1:10, &quot;m/s&quot;))
+m &lt;- make_unit(&quot;m&quot;)
+s &lt;- make_unit(&quot;s&quot;)
+</code></pre>
+
+<p>The objects created, </p>
+
+<pre><code class="r">m
+</code></pre>
+
+<pre><code>## 1 m
+</code></pre>
+
+<p>represent a single value of the named quantity (&ldquo;m&#39;&#39;).  To obtain
+different quantities of named units, we use them in expressions
+such as </p>
+
+<pre><code class="r">(a &lt;- 1:10 * m/s)
 </code></pre>
 
 <pre><code>## Units: m/s
 ##  [1]  1  2  3  4  5  6  7  8  9 10
 </code></pre>
 
-<p>and converted by setting a new physical unit:</p>
+<p>the result, e.g. </p>
+
+<pre><code class="r">a[10]
+</code></pre>
+
+<pre><code>## 10 m/s
+</code></pre>
+
+<p>literally means &quot;10 times 1 m divided by 1 s&rdquo;. In writing, the &ldquo;1&rdquo;
+values are omitted, and the multiplication is implicit.</p>
+
+<p>The <code>units</code> package comes with a list of over 3000 predefined units, which
+can be used without calling <code>make_unit</code>. 
+One way of making this list available would be to attach it, but
+this leads to a number of name conflicts: <code>T</code> (for tesla) wound
+mask the value that otherwise refers to <code>TRUE</code>, .</p>
+
+<p>A cleaner approach is to use <code>with</code>, as in</p>
+
+<pre><code class="r">rm(m) ; rm(s)
+with(ud_units, 1:10 * m/s)
+</code></pre>
+
+<pre><code>## Units: m/s
+##  [1]  1  2  3  4  5  6  7  8  9 10
+</code></pre>
+
+<p>When conversion is meaningful, such as hours to seconds or meters to kilometers, conversion can be done explicitly by setting the units of a vector</p>
 
 <pre><code class="r">b = a
-units(b) = &quot;km/h&quot;
+units(b) &lt;- with(ud_units, km/h)
 b
 </code></pre>
 
 <pre><code>## Units: km/h
 ##  [1]  3.6  7.2 10.8 14.4 18.0 21.6 25.2 28.8 32.4 36.0
-</code></pre>
-
-<p>Impossible conversions lead to an error:</p>
-
-<pre><code class="r">x = try(units(a) &lt;- &quot;secs&quot;)
-attr(x, &quot;condition&quot;)[[1]]
-</code></pre>
-
-<pre><code>## [1] &quot;cannot convert m/s into secs&quot;
 </code></pre>
 
 <h2>Basic manipulations</h2>
@@ -311,19 +345,26 @@ attr(x, &quot;condition&quot;)[[1]]
 <pre><code class="r">a * a
 </code></pre>
 
-<pre><code>## Units: (m/s)*(m/s)
+<pre><code>## Units: m*m/s/s
 ##  [1]   1   4   9  16  25  36  49  64  81 100
 </code></pre>
 
-<pre><code class="r">a ^ 2.5
+<pre><code class="r">a ^ 2
 </code></pre>
 
-<pre><code>## Units: (m/s)^2.5
-##  [1]   1.000000   5.656854  15.588457  32.000000  55.901699  88.181631
-##  [7] 129.641814 181.019336 243.000000 316.227766
+<pre><code>## Units: m*m/s/s
+##  [1]   1   4   9  16  25  36  49  64  81 100
 </code></pre>
 
-<p>and convert if necessary:</p>
+<pre><code class="r">a ** -2
+</code></pre>
+
+<pre><code>## Units: s*s/m/m
+##  [1] 1.00000000 0.25000000 0.11111111 0.06250000 0.04000000 0.02777778
+##  [7] 0.02040816 0.01562500 0.01234568 0.01000000
+</code></pre>
+
+<p>and convert to the units of the first argument if necessary:</p>
 
 <pre><code class="r">a + b # m/s + km/h -&gt; m/s
 </code></pre>
@@ -332,17 +373,39 @@ attr(x, &quot;condition&quot;)[[1]]
 ##  [1]  2  4  6  8 10 12 14 16 18 20
 </code></pre>
 
-<p>but units are not simplified:</p>
+<p>Currently, powers are only supported for integer powers, so using <code>a ** 2.5</code> would result in an error.</p>
 
-<pre><code class="r">t = as.units(1, &quot;s&quot;)
+<p>There are some basic simplification of units:</p>
+
+<pre><code class="r">t &lt;- with(ud_units, s)
 a * t
 </code></pre>
 
-<pre><code>## Units: (m/s)*(s)
+<pre><code>## Units: m
 ##  [1]  1  2  3  4  5  6  7  8  9 10
 </code></pre>
 
-<p>Allowed operations that require convertable units are <code>+</code>, <code>-</code>, <code>==</code>,
+<p>which also work when units need to be converted before they can be simplified:</p>
+
+<pre><code class="r">t &lt;- with(ud_units, min)
+a * t
+</code></pre>
+
+<pre><code>## Units: m
+##  [1]  60 120 180 240 300 360 420 480 540 600
+</code></pre>
+
+<p>Simplification to unit-less values gives the &ldquo;1&rdquo; as unit:</p>
+
+<pre><code class="r">m &lt;- with(ud_units, m)
+a * t / m
+</code></pre>
+
+<pre><code>## Units: 1
+##  [1]  60 120 180 240 300 360 420 480 540 600
+</code></pre>
+
+<p>Allowed operations that require convertible units are <code>+</code>, <code>-</code>, <code>==</code>,
 <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>.  Operations that lead to new units are
 <code>*</code>, <code>/</code>, and the power operations <code>**</code> and <code>^</code>.</p>
 
@@ -351,11 +414,11 @@ a * t
 <p>Mathematical operations allowed are: <code>abs</code>, <code>sign</code>, <code>floor</code>,
 <code>ceiling</code>, <code>trunc</code>, <code>round</code>, <code>signif</code>, <code>log</code>, <code>cumsum</code>, <code>cummax</code>, <code>cummin</code>.</p>
 
-<pre><code class="r">signif(a^2.5, 3)
+<pre><code class="r">signif(a ** 2 / 3, 3)
 </code></pre>
 
-<pre><code>## Units: (m/s)^2.5
-##  [1]   1.00   5.66  15.60  32.00  55.90  88.20 130.00 181.00 243.00 316.00
+<pre><code>## Units: m*m/s/s
+##  [1]  0.333  1.330  3.000  5.330  8.330 12.000 16.300 21.300 27.000 33.300
 </code></pre>
 
 <pre><code class="r">cumsum(a)
@@ -418,7 +481,7 @@ a * t
 ## [1]  1 10
 </code></pre>
 
-<pre><code class="r">min(as.units(1, &quot;m/s&quot;), as.units(1, &quot;km/h&quot;)) # converts to first unit:
+<pre><code class="r">with(ud_units, min(m/s, km/h)) # converts to first unit:
 </code></pre>
 
 <pre><code>## 0.2777778 m/s
@@ -491,16 +554,7 @@ a * t
 <pre><code class="r">t1 = Sys.time() 
 t2 = t1 + 3600 
 d = t2 - t1
-as.units(d)
-</code></pre>
-
-<pre><code>## 1 h
-</code></pre>
-
-<pre><code class="r">(du = as.units(d, &quot;d&quot;))
-</code></pre>
-
-<pre><code>## 0.04166667 d
+du &lt;- as.units(d)
 </code></pre>
 
 <p>vice versa:</p>
@@ -515,12 +569,12 @@ class(dt)
 <pre><code class="r">dt
 </code></pre>
 
-<pre><code>## Time difference of 0.04166667 days
+<pre><code>## Time difference of 1 hours
 </code></pre>
 
 <h2>units in <code>matrix</code> objects</h2>
 
-<pre><code class="r">as.units(matrix(1:4,2,2), &quot;m/s&quot;)
+<pre><code class="r">with(ud_units, matrix(1:4,2,2) * m/s)
 </code></pre>
 
 <pre><code>## Units: m/s
@@ -529,10 +583,10 @@ class(dt)
 ## [2,]    2    4
 </code></pre>
 
-<pre><code class="r">as.units(matrix(1:4,2,2), &quot;m/s&quot;) * as.units(4, &quot;m/s&quot;)
+<pre><code class="r">with(ud_units, matrix(1:4,2,2) * m/s * 4 * m/s)
 </code></pre>
 
-<pre><code>## Units: (m/s)*(m/s)
+<pre><code>## Units: m*m/s/s
 ##      [,1] [,2]
 ## [1,]    4   12
 ## [2,]    8   16
@@ -540,7 +594,7 @@ class(dt)
 
 <p>but</p>
 
-<pre><code class="r">as.units(matrix(1:4,2,2), &quot;m/s&quot;) %*% as.units(4:3, &quot;m/s&quot;)
+<pre><code class="r">with(ud_units, (matrix(1:4,2,2) * m/s) %*% (4:3 * m/s))
 </code></pre>
 
 <pre><code>##      [,1]
@@ -552,8 +606,13 @@ class(dt)
 
 <h2>units objects in <code>data.frame</code>s</h2>
 
+<p>units in <code>data.frame</code> objects are printed, but do not appear in <code>summary</code>:.</p>
+
 <pre><code class="r">set.seed(131)
-d = data.frame(x = runif(4), y = as.units(runif(4), &quot;s&quot;), z = as.units(1:4, &quot;m/s&quot;))
+d &lt;- with(ud_units,
+         data.frame(x = runif(4), 
+                    y = runif(4) * s, 
+                    z = 1:4 * m/s))
 d
 </code></pre>
 
@@ -580,17 +639,79 @@ d
 d
 </code></pre>
 
-<pre><code>##           x           y     z                  yz
-## 1 0.2064370 0.8463468 s 1 m/s 0.8463468 (s)*(m/s)
-## 2 0.1249422 0.5292048 s 2 m/s 1.0584095 (s)*(m/s)
-## 3 0.2932732 0.5186254 s 3 m/s 1.5558761 (s)*(m/s)
-## 4 0.3757797 0.2378545 s 4 m/s 0.9514180 (s)*(m/s)
+<pre><code>##           x           y     z          yz
+## 1 0.2064370 0.8463468 s 1 m/s 0.8463468 m
+## 2 0.1249422 0.5292048 s 2 m/s 1.0584095 m
+## 3 0.2932732 0.5186254 s 3 m/s 1.5558761 m
+## 4 0.3757797 0.2378545 s 4 m/s 0.9514180 m
 </code></pre>
 
 <pre><code class="r">d[1, &quot;yz&quot;]
 </code></pre>
 
-<pre><code>## 0.8463468 (s)*(m/s)
+<pre><code>## 0.8463468 m
+</code></pre>
+
+<h2>formatting</h2>
+
+<p>Units are often written in the form <code>m2 s-1</code>, for square meter per second. This
+can be defined as unit, but is not interpreted by R:</p>
+
+<pre><code class="r">(x = 1:10 * make_unit(&quot;m2 s-1&quot;))
+</code></pre>
+
+<pre><code>## Units: (m2 s-1)
+##  [1]  1  2  3  4  5  6  7  8  9 10
+</code></pre>
+
+<p>udunits understands such string, and can convert them</p>
+
+<pre><code class="r">y = 1:10 * with(ud_units, m^2/s)
+x + y
+</code></pre>
+
+<pre><code>## Units: (m2 s-1)
+##  [1]  2  4  6  8 10 12 14 16 18 20
+</code></pre>
+
+<p>but R cannot simplify them:</p>
+
+<pre><code class="r">x/y
+</code></pre>
+
+<pre><code>## Units: (m2 s-1)*s/m/m
+##  [1] 1 1 1 1 1 1 1 1 1 1
+</code></pre>
+
+<p>Instead, we can tell R to parse such a string, which then allows simplification:</p>
+
+<pre><code class="r">(z = 1:10 * parse_unit(&quot;m2 s-1&quot;))
+</code></pre>
+
+<pre><code>## Units: m*m/s
+##  [1]  1  2  3  4  5  6  7  8  9 10
+</code></pre>
+
+<pre><code class="r">z + y
+</code></pre>
+
+<pre><code>## Units: m*m/s
+##  [1]  2  4  6  8 10 12 14 16 18 20
+</code></pre>
+
+<pre><code class="r">z / y
+</code></pre>
+
+<pre><code>## Units: 1
+##  [1] 1 1 1 1 1 1 1 1 1 1
+</code></pre>
+
+<p>Printing units in this form is done by</p>
+
+<pre><code class="r">as_cf(z)
+</code></pre>
+
+<pre><code>## [1] &quot;m2 s-1&quot;
 </code></pre>
 
 </body>

@@ -1,4 +1,0 @@
-Summary.units:
- check for unit compatibility; now sum(as.units(1, "m/s"), 2) gives 3 m/s.
-
-numeric vectors: default to units "1" ?
