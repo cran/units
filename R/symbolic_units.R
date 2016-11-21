@@ -53,30 +53,76 @@ Ops.symbolic_units <- function(e1, e2) {
 #' @export
 unitless <- .symbolic_units(vector("character"), vector("character"))
 
-#' @export
-as.character.symbolic_units <- function(x, ...) {
-  nom_str <- ""
-  sep <- ""
-  denom_str <- ""
-  
-  fix = function(term) {
+.pretty_print_sequence <- function(terms, op, neg_power = FALSE, sep = "") {
+  # `fix` handles cases where a unit is actually an expression. We would have to
+  # deparse these to really do a pretty printing, but for now we leave them alone...
+  fix <- function(term) {
     if (length(grep("/", term)) || length(grep("-", term)))
       paste0("(", term, ")")
     else
       term
   }
-  if (length(x$numerator) == 0) {
-    nom_str <- "1"
-  } else {
-    nom_str <- paste0(sapply(x$numerator, fix), collapse = "*")
+  fixed <- vapply(terms, fix, "")
+  fixed_tbl <- table(fixed)
+  
+  names <- names(fixed_tbl)
+  result <- vector("character", length(fixed_tbl))
+  for (i in seq_along(fixed_tbl)) {
+    name <- names[i]
+    value <- fixed_tbl[i]
+    if (value > 1 || (value == 1 && neg_power)) {
+	  if (neg_power)
+	  	value <- value * -1
+      result[i] <- paste0(name, "^", value)
+    } else {
+      result[i] <- name
+    }
   }
   
-  if (length(x$denominator) > 0) {
-    sep = "/"
-    denom_str <- paste0(sapply(x$denominator, fix), collapse = "/")
+  paste0(result, collapse = paste0(op, sep))
+}
+
+#' @export
+as.character.symbolic_units <- function(x, ..., 
+		neg_power = get(".units.negative_power", envir = .units_options), 
+		escape_units = FALSE, plot_sep = "") {
+  num_str <- character(0)
+  denom_str <- character(0)
+  sep <- plot_sep
+
+  numerator <- x$numerator
+  denominator <- x$denominator
+  if (escape_units) {
+    numerator <- unlist(Map(function(name) paste0("`", name, "`", sep = ""), numerator))
+    denoinator <- unlist(Map(function(name) paste0("`", name, "`", sep = ""), denominator))
+  }
+  
+  if (length(numerator) == 0) {
+    if (! neg_power)
+	  num_str <- "1" # 1/cm^2/h
+  } else {
+    num_str <- .pretty_print_sequence(numerator, "*", FALSE, plot_sep)
+  }
+  
+  if (length(denominator) > 0) {
+    sep <- if (neg_power)
+	    paste0("*", plot_sep)
+	  else
+        "/"
+    denom_str <- .pretty_print_sequence(denominator, sep, neg_power, plot_sep)
   }
 
-  paste0(nom_str, sep, denom_str)
+  if (length(num_str) == 0) {
+    if (length(denom_str) == 0)
+	  return("")
+    else
+	  return(denom_str)
+  }
+
+  if (length(denom_str) == 0)
+    return(num_str)
+
+  paste(num_str, denom_str, sep = sep)
 }
 
 #' Create a new unit from a unit name.

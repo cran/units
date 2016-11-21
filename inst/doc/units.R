@@ -1,3 +1,6 @@
+## ----echo=FALSE----------------------------------------------------------
+knitr::opts_chunk$set(collapse = TRUE)
+
 ## ------------------------------------------------------------------------
 t1 = Sys.time() 
 t2 = t1 + 3600 
@@ -128,4 +131,38 @@ z / y
 
 ## ------------------------------------------------------------------------
 as_cf(z)
+
+## ----fig=TRUE------------------------------------------------------------
+mar = par("mar") + c(0, .3, 0, 0)
+displacement = mtcars$disp * ud_units[["in"]]^3
+units(displacement) = with(ud_units, cm^3)
+weight = mtcars$wt * 1000 * with(ud_units, lb)
+units(weight) = with(ud_units, kg)
+par(mar = mar)
+plot(weight, displacement)
+
+## ------------------------------------------------------------------------
+units_options(group = c("(", ")") )  # parenthesis instead of square brackets
+par(mar = mar)
+plot(weight, displacement)
+
+## ------------------------------------------------------------------------
+units_options(sep = c("~~~", "~"), group = c("", ""))  # no brackets; extra space
+par(mar = mar)
+plot(weight, displacement)
+
+## ------------------------------------------------------------------------
+gallon = make_unit("gallon")
+consumption = mtcars$mpg * with(ud_units, mi/gallon)
+units(consumption) = with(ud_units, km/l)
+par(mar = mar)
+plot(displacement, consumption) # division in consumption
+units_options(negative_power = TRUE) # division becomes ^-1
+plot(displacement, consumption) # division in consumption
+
+## ------------------------------------------------------------------------
+units_options(negative_power = TRUE) # division becomes ^-1
+par(mar = mar)
+plot(displacement, consumption)
+plot(1/displacement, 1/consumption)
 
