@@ -1,7 +1,7 @@
-5fffd37b9f7aad473cab2614584de192 *DESCRIPTION
+d8f1431dc921b6801f38b406eb3243b1 *DESCRIPTION
 51267c0d5f4f1ad9ac240f5a57b54d9d *NAMESPACE
 c5eadc252d285909e07ea0d877d915bc *R/arith.R
-94dc25599e74df7eddca790503e86bcb *R/conversion.R
+aa22904476dd3a141318fd2cc9cb6c43 *R/conversion.R
 a86e9626e44a1c1e092cca4a6f6fec42 *R/math.R
 f881a14ab6ddc38cf7a0b6c0993e9fb1 *R/misc.R
 31979354c06c87f89896e60525cb8c8b *R/options.R
@@ -17,8 +17,8 @@ a5b1424e81e8a55f734e0ec33b67129b *demo/00Index
 a3d9c06754b67d2bddc9c636f142f34f *demo/ggforce.R
 9233f4cd2d39d8850034e7f080b45444 *demo/year.R
 d73e9ead781f1e0cee4ea1462c741c01 *inst/doc/measurement_units_in_R.R
-a6efb461998bc34499b7dd0ee06d0422 *inst/doc/measurement_units_in_R.Rnw
-9a309878e11e1d2dd2b1b9f7184edc4f *inst/doc/measurement_units_in_R.pdf
+df78f1eaee7ba1741267353e2786d344 *inst/doc/measurement_units_in_R.Rnw
+bb7791debc16db9fc2d3a79e72bf0324 *inst/doc/measurement_units_in_R.pdf
 750ad325da82bffa321b8e4394f7ce2b *inst/doc/units.R
 4699942b1bcb53f46536c4b931bb7977 *inst/doc/units.Rmd
 8f674281a32a6c75b44796052785107e *inst/doc/units.html
@@ -51,6 +51,6 @@ bec300764a420bd3aee8c784d3529562 *vignettes/647_Global_Temperature_Data_File.txt
 11f9080ed8834f58518e6ec4cba5f421 *vignettes/RJournal.sty
 dcb0d9fd6b7e648c71d1c020569aeae1 *vignettes/fig1.pdf
 a1a742c49be86cc1f76c55c4171d0fd7 *vignettes/fig2.pdf
-a6efb461998bc34499b7dd0ee06d0422 *vignettes/measurement_units_in_R.Rnw
-0b87de87b6b4db4aad49d1bbc201046f *vignettes/measurement_units_in_R.bib
+df78f1eaee7ba1741267353e2786d344 *vignettes/measurement_units_in_R.Rnw
+b7117ed7b61ea98fea9f717e6f5578ee *vignettes/measurement_units_in_R.bib
 4699942b1bcb53f46536c4b931bb7977 *vignettes/units.Rmd
