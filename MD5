@@ -1,13 +1,13 @@
-d8f1431dc921b6801f38b406eb3243b1 *DESCRIPTION
+565316d14b533cb14c7b747fe2c79a74 *DESCRIPTION
 51267c0d5f4f1ad9ac240f5a57b54d9d *NAMESPACE
 c5eadc252d285909e07ea0d877d915bc *R/arith.R
-aa22904476dd3a141318fd2cc9cb6c43 *R/conversion.R
+8f3b82af30b7214dfd426f8c60d8b5af *R/conversion.R
 a86e9626e44a1c1e092cca4a6f6fec42 *R/math.R
-f881a14ab6ddc38cf7a0b6c0993e9fb1 *R/misc.R
+77bcd000d57531fdb89cb1b13907d06c *R/misc.R
 31979354c06c87f89896e60525cb8c8b *R/options.R
 716c54bb4dfb304e10f471f62bf4b3dd *R/plot.R
 824e58718af81cdd56655e2e33c7f46f *R/summaries.R
-1f0d2cb5c310e18c0d431554a9a737d6 *R/symbolic_units.R
+5b8d2bb9eb7cdb1a979df7e996980177 *R/symbolic_units.R
 85bceed7426dfdea2fa2202301b5927c *R/ud_units.R
 43ec7a356a5adebf374b1784312bfb58 *TODO
 382603f3fe2fe6b731af046a4e3b96a1 *build/vignette.rds
@@ -18,7 +18,7 @@ a3d9c06754b67d2bddc9c636f142f34f *demo/ggforce.R
 9233f4cd2d39d8850034e7f080b45444 *demo/year.R
 d73e9ead781f1e0cee4ea1462c741c01 *inst/doc/measurement_units_in_R.R
 df78f1eaee7ba1741267353e2786d344 *inst/doc/measurement_units_in_R.Rnw
-bb7791debc16db9fc2d3a79e72bf0324 *inst/doc/measurement_units_in_R.pdf
+263d782e5cfb14e7fe07da9e1b45ad12 *inst/doc/measurement_units_in_R.pdf
 750ad325da82bffa321b8e4394f7ce2b *inst/doc/units.R
 4699942b1bcb53f46536c4b931bb7977 *inst/doc/units.Rmd
 8f674281a32a6c75b44796052785107e *inst/doc/units.html
