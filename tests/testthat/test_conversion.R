@@ -36,6 +36,9 @@ test_that("we can convert between two units that can be converted", {
   x <- y <- 1:4 * m
   units(x) <- km
   expect_equal(as.numeric(y), 1000 * as.numeric(x))
+  library(magrittr)
+  y %>% set_units(km) -> z
+  expect_equal(x, z)
 })
 
 test_that("we can't convert between two units that can't be converted", {
@@ -87,3 +90,17 @@ test_that("m + m*s is an error", {
   s <- make_unit("s")
   expect_error(m + m * s)
 })
+
+test_that("we can convert between units that are not simply a scalar from each other", {
+  m <- 0 * parse_unit("degC")
+  units(m) <- parse_unit("degK")
+  expect_equal(as.numeric(m), udunits2::ud.convert(0, "degC", "degK"))  
+  expect_equal(as.character(units(m)), "degK")
+  
+  temp <- 75 * parse_unit('degF')
+  units(temp) <- parse_unit('degK')
+  result <- temp / parse_unit('degF')
+  expect_equal(as.numeric(result), 75)
+  expect_equal(units(result), unitless)
+})
+

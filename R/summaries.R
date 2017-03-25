@@ -10,7 +10,7 @@ Summary.units = function(..., na.rm = FALSE) {
   
   args = list(...)
   u = units(args[[1]])
-  if (length(args) > 1)
+  if (length(args) > 1) {
     for (i in 2:length(args)) {
       if (!inherits(args[[i]], "units"))
         stop(paste("argument", i, "is not of class units"))
@@ -19,8 +19,10 @@ Summary.units = function(..., na.rm = FALSE) {
                    "has units that are not convertible to that of the first argument"))
       args[[i]] = as.units(args[[i]], u) # convert to first unit
     }
+  }
   args = lapply(args, unclass)
-  as.units(do.call(.Generic, args), u)
+  # as.units(do.call(.Generic, args), u)
+  as.units(do.call(.Generic, c(args, na.rm = na.rm)), u)
 }
 
 #' @export
@@ -53,9 +55,19 @@ mean.units = function(x, ...) {
 }
 
 #' @export
-median.units = function(x, na.rm = FALSE) {
-  .as.units(median(unclass(x), na.rm = na.rm), units(x))
+median.units = function(x, na.rm = FALSE, ...) {
 }
+
+median.units <- if (is.na(match("...", names(formals(median))))) {
+    function(x, na.rm = FALSE) {
+  		.as.units(median(unclass(x), na.rm = na.rm), units(x))
+    }
+} else {
+    function(x, na.rm = FALSE, ...) {
+  		.as.units(median(unclass(x), na.rm = na.rm, ...), units(x))
+    }
+}
+
 
 #' @export
 quantile.units = function(x, ...) {
@@ -65,4 +77,9 @@ quantile.units = function(x, ...) {
 #' @export
 format.units = function(x, ...) {
   paste(format(unclass(x), ...), units(x))
+}
+
+#' @export
+summary.units = function(object, ...) { 
+  summary(unclass(object), ...)
 }

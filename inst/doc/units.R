@@ -1,6 +1,9 @@
 ## ----echo=FALSE----------------------------------------------------------
 knitr::opts_chunk$set(collapse = TRUE)
 
+## ----echo=FALSE----------------------------------------------------------
+units:::units_options(negative_power = FALSE)
+
 ## ------------------------------------------------------------------------
 t1 = Sys.time() 
 t2 = t1 + 3600 
@@ -13,21 +16,19 @@ d
 
 ## ------------------------------------------------------------------------
 library(units)
-m <- make_unit("m")
-s <- make_unit("s")
+ud_units[1:3]
 
 ## ------------------------------------------------------------------------
-m
+(a <- set_units(runif(10),  m/s))
 
 ## ------------------------------------------------------------------------
-(a <- 1:10 * m/s)
+set_units(10, m/s)
 
 ## ------------------------------------------------------------------------
-a[10]
+length(ud_units)
 
 ## ------------------------------------------------------------------------
-rm(m) ; rm(s)
-with(ud_units, 1:10 * m/s)
+with(ud_units, km/h)
 
 ## ------------------------------------------------------------------------
 b = a
@@ -88,26 +89,24 @@ c(b,a) # km/h, m/s -> km/h
 t1 = Sys.time() 
 t2 = t1 + 3600 
 d = t2 - t1
-du <- as.units(d)
+(du = as.units(d))
 
 ## ------------------------------------------------------------------------
-dt = as.dt(du)
+(dt = as.dt(du))
 class(dt)
-dt
 
 ## ------------------------------------------------------------------------
-with(ud_units, matrix(1:4,2,2) * m/s)
-with(ud_units, matrix(1:4,2,2) * m/s * 4 * m/s)
+set_units(matrix(1:4,2,2), m/s)
+set_units(matrix(1:4,2,2), m/s * 4 * m/s)
 
 ## ------------------------------------------------------------------------
-with(ud_units, (matrix(1:4,2,2) * m/s) %*% (4:3 * m/s))
+set_units(matrix(1:4,2,2), m/s) %*% set_units(4:3, m/s)
 
 ## ------------------------------------------------------------------------
 set.seed(131)
-d <- with(ud_units,
-         data.frame(x = runif(4), 
-                    y = runif(4) * s, 
-                    z = 1:4 * m/s))
+d <- data.frame(x = runif(4), 
+                    y = set_units(runif(4), s), 
+                    z = set_units(1:4, m/s))
 d
 summary(d)
 d$yz = with(d, y * z)
@@ -165,4 +164,7 @@ units_options(negative_power = TRUE) # division becomes ^-1
 par(mar = mar)
 plot(displacement, consumption)
 plot(1/displacement, 1/consumption)
+
+## ----echo=FALSE----------------------------------------------------------
+units_options(negative_power = FALSE) # division becomes /
 

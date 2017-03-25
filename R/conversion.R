@@ -3,15 +3,15 @@ NULL
 #' @import stats
 #' @import udunits2
 NULL
-#Sys.setenv(UDUNITS2_XML_PATH = "/usr/local/share/udunits/udunits2.xml")
 
 #' Set measurement units on a numeric vector
 #'
-#' @param x numeric vector
-#' @param value character; unit of measurement string
+#' @param x numeric vector, or object of class \code{units}
+#' @param value object of class \code{units} or \code{symbolic_units}, or in the case of \code{set_units} expression with symbols that can be resolved in \link{ud_units} (see examples).
 #'
 #' @return object of class \code{units}
 #' @export
+#' @name units
 #'
 #' @examples
 #' x = 1:3
@@ -31,9 +31,6 @@ NULL
 }
 
 #' Convert units
-#' 
-#' @param x object of class \code{units}
-#' @param value length one character vector with target unit
 #' 
 #' @name units
 #' @export
@@ -57,14 +54,44 @@ NULL
   if (udunits2::ud.are.convertible(str1, str2)) 
     structure(udunits2::ud.convert(x, str1, str2), units = value)
   else
-    stop(paste("cannot convert", units(x), "into", value))
+    stop(paste("cannot convert", units(x), "into", value), call. = FALSE)
 }
 
-#' retrieve measurement units from units object
-#'
-#' @param x object of class \code{units}
+#' @name units
+#' @export
+#' @param ... ignored
+#' @details \code{set_units} is a pipe-friendly version of \code{units<-} that evaluates \code{value} first in the environment of \link{ud_units}.
+#' @examples
+#' # note that these units have NOT been defined or declared before:
+#' set_units(1:5, N/m^2)
+#' if (require(magrittr)) {
+#'  1:5 %>% set_units(N/m^2)
+#'  1:10 %>% set_units(m) %>% set_units(km)
+#' }
+set_units = function(x, value, ...) UseMethod("set_units")
+
+#' @name units
+#' @export
+set_units.units = function(x, value, ...) {
+  u = eval(substitute(value), ud_units)
+  stopifnot(inherits(u, "units"))
+  units(x) = u
+  x
+}
+
+#' @name units
+#' @export
+set_units.numeric = function(x, value, ...) {
+  u = eval(substitute(value), ud_units, parent.frame()) 
+  stopifnot(inherits(u, "units"))
+  x * u
+}
+
+#' retrieve measurement units from \code{units} object
 #'
 #' @export
+#' @name units
+#' @return the units method retrieves the units attribute, which is of class \code{symbolic_units}
 units.units <- function(x) {
   attr(x, "units")
 }
@@ -80,25 +107,27 @@ as.units <- function(x, value = unitless) {
 }
 
 #' @export
+#' @name as.units
 as.units.default <- function(x, value = unitless) {
-#  value.name = as.character(substitute(value))
-#  tr = try(ret <- get(value.name), silent = TRUE)
-#  if (inherits(tr, "try-error"))
-#  	value = with(ud_units, value)
-#  else
-#  	value = ret
-#  if (is.null(value))
-#  	stop(paste("unit", value.name, "not found: define with make_unit?"))
+
+  unit_name <- substitute(value)
+  if (is.symbol(unit_name)) {
+    unit_name <- as.character(unit_name)
+    if (!exists(unit_name, envir = parent.frame())) {
+      value <- units:: ud_units[[unit_name]]
+      if (is.null(value))
+        stop(paste("unit", unit_name, "not found: define with make_unit?"))
+    }
+  }
+  
   units(x) <- value
   x
 }
 
 #' convert difftime objects to units
 #'
-#' @param x object of class units
-#' @param value target unit; if omitted, taken from \code{x}
-#'
 #' @export
+#' @name as.units
 #' 
 #' @examples
 #' s = Sys.time()

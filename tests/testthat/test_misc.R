@@ -57,3 +57,23 @@ test_that("as_cf works", {
   str0 = as_cf(u)
   expect_equal(str, str0)
 })
+
+test_that("we can provide a symbol to as.units and make it look in ud_units", {
+  five_ha <- as.units(5, ha) # ha pulled from ud_units
+  expect_equal(as.numeric(five_ha), 5)
+  expect_equal(units(five_ha), units(ud_units$ha))
+  
+  ha <- make_unit("m") # make sure that user-defined units overrule
+  five_ha <- as.units(5, ha) # ha pulled from ud_units
+  expect_equal(as.numeric(five_ha), 5)
+  expect_equal(units(five_ha), units(ud_units$m))
+  
+})
+
+test_that("set_units(x, u) is a short form for x * with(ud_units, u)", {
+  expect_identical(set_units(1:10, m/s), 1:10 * with(ud_units, m/s))
+  x = set_units(1:5, m/s)
+  y = x
+  units(y) = set_units(1, km/h)
+  expect_identical(y, set_units(x, km/h))
+})
