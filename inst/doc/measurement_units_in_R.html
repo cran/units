@@ -157,7 +157,7 @@ $(document).ready(function () {
 <li><code>difftime</code> objects specify how time duration can be represented by numbers, with flexible units (secs, mins, hours, days, weeks); <a href="https://cran.r-project.org/package=lubridate">lubridate</a> <span class="citation">(Grolemund and Wickham 2011)</span> extends some of this functionality.</li>
 </ul>
 <p>Furthermore, if spatial objects as defined in package <a href="https://cran.r-project.org/package=sp">sp</a> <span class="citation">(E. Pebesma and Bivand 2005)</span> have a proper coordinate reference system set, they can be transformed to other datums, or converted to various flat (projected) representations of the Earth <span class="citation">(Iliffe and Lott 2008)</span>.</p>
-<p>In many cases however, R drops contextual information. As an example, we look at annual global land-ocean temperature index (from <a href="http://climate.nasa.gov/vital-signs/global-temperature/" class="uri">http://climate.nasa.gov/vital-signs/global-temperature/</a> ) since 1960:</p>
+<p>In many cases however, R drops contextual information. As an example, we look at annual global land-ocean temperature index (from <code>http://climate.nasa.gov/vital-signs/global-temperature/</code>) since 1960:</p>
 <pre class="r"><code>temp_data = subset(read.table(&quot;647_Global_Temperature_Data_File.txt&quot;, 
     header=TRUE)[1:2], Year &gt;= 1960)
 temp_data$date = as.Date(paste0(temp_data$Year, &quot;-01-01&quot;))
@@ -410,8 +410,8 @@ attr(e, &quot;condition&quot;)[[1]]
 <pre class="r"><code>methods(class = &quot;units&quot;)
 ##  [1] Math          Ops           Summary       [             as.data.frame
 ##  [6] c             diff          format        hist          mean         
-## [11] median        plot          print         quantile      set_units    
-## [16] summary       units         units&lt;-       weighted.mean
+## [11] median        plot          print         quantile      rep          
+## [16] set_units     summary       units         units&lt;-       weighted.mean
 ## see '?methods' for accessing help and source code</code></pre>
 <p>where the method groups</p>
 <ul>
@@ -581,7 +581,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

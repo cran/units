@@ -44,6 +44,13 @@ Ops.units <- function(e1, e2) {
     units(e2) <- units(e1) # convert before we can compare
   }
   
+  if (!pw && length(e1) != length(e2)) {
+  	if (length(e1) < length(e2))
+		e1 = rep(e1, length.out = length(e2))
+	else
+  		e2 = rep(e2, length.out = length(e1))
+  }
+
   if (prd) {
     if (inherits(e1, "units") && inherits(e2, "units")) {
       # both vectors have units
@@ -64,7 +71,8 @@ Ops.units <- function(e1, e2) {
       
     } else if (inherits(e2, "units")) {
       # only e2 has units
-      if (.Generic == "*")      attr(e1, "units") <- units(e2)
+      if (.Generic == "*")
+        attr(e1, "units") <- units(e2)
       else if (.Generic == "/") { 
 	    if (length(e1) == 1) # I wish I understood why this is needed
 		  attr(e2, "units") <- .invert_symbolic_units(units(e2))
@@ -96,7 +104,6 @@ Ops.units <- function(e1, e2) {
     }
         
   }
-  
   NextMethod(.Generic)
 }
 
