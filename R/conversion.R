@@ -4,6 +4,19 @@ NULL
 #' @import udunits2
 NULL
 
+# Helper functions for testing if we can convert and how using either
+# user-defined conversion functions or udunits.
+are_convertible <- function(from, to) {
+  user_are_convertible(from, to) || udunits2::ud.are.convertible(from, to)
+}
+
+convert <- function(value, from, to) {
+  value <- unclass(value)
+  if (user_are_convertible(from, to)) user_convert(value, from, to)
+  else if (udunits2::ud.are.convertible(from, to)) udunits2::ud.convert(value, from, to)
+  else NA
+}
+
 #' Set measurement units on a numeric vector
 #'
 #' @param x numeric vector, or object of class \code{units}
@@ -51,8 +64,8 @@ NULL
   str1 <- as.character(units(x))
   str2 <- as.character(value)
 
-  if (udunits2::ud.are.convertible(str1, str2)) 
-    structure(udunits2::ud.convert(x, str1, str2), units = value)
+  if (are_convertible(str1, str2)) 
+    structure(convert(x, str1, str2), units = value, class = "units")
   else
     stop(paste("cannot convert", units(x), "into", value), call. = FALSE)
 }
@@ -64,6 +77,7 @@ NULL
 #' @examples
 #' # note that these units have NOT been defined or declared before:
 #' set_units(1:5, N/m^2)
+#' set_units(1:5, unitless) # unit "1", unitless
 #' if (require(magrittr)) {
 #'  1:5 %>% set_units(N/m^2)
 #'  1:10 %>% set_units(m) %>% set_units(km)
@@ -73,18 +87,29 @@ set_units = function(x, value, ...) UseMethod("set_units")
 #' @name units
 #' @export
 set_units.units = function(x, value, ...) {
-  u = eval(substitute(value), ud_units)
-  stopifnot(inherits(u, "units"))
+  e = try(u <- eval(substitute(value), ud_units, parent.frame()))
+  if (inherits(e, "try-error") || ! (inherits(u, "units") || inherits(u, "symbolic_units"))) {
+	stopifnot(is.character(value))
+	if (! value %in% names(ud_units))
+		value = ud.get.symbol(value)
+  	u = ud_units[[ value ]]
+  }
   units(x) = u
   x
 }
 
 #' @name units
 #' @export
-set_units.numeric = function(x, value, ...) {
-  u = eval(substitute(value), ud_units, parent.frame()) 
-  stopifnot(inherits(u, "units"))
-  x * u
+set_units.numeric = function(x, value = unitless, ...) {
+  e = try(u <- eval(substitute(value), ud_units, parent.frame()))
+  if (inherits(e, "try-error") || ! (inherits(u, "units") || inherits(u, "symbolic_units"))) {
+	stopifnot(is.character(value))
+	if (! value %in% names(ud_units))
+		value = ud.get.symbol(value)
+  	u = ud_units[[ value ]]
+  }
+  units(x) = u
+  x
 }
 
 #' retrieve measurement units from \code{units} object

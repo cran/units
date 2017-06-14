@@ -1,5 +1,5 @@
 Package: units
-Version: 0.4-4
+Version: 0.4-5
 Title: Measurement Units for R Vectors
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"),
 		email = "edzer.pebesma@uni-muenster.de"),
@@ -20,9 +20,9 @@ BugReports: https://github.com/edzer/units/issues/
 RoxygenNote: 6.0.1
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2017-04-20 21:03:26 UTC; edzer
+Packaged: 2017-06-13 13:50:39 UTC; edzer
 Author: Edzer Pebesma [aut, cre],
   Thomas Mailund [aut]
 Maintainer: Edzer Pebesma <edzer.pebesma@uni-muenster.de>
 Repository: CRAN
-Date/Publication: 2017-04-20 23:40:20 UTC
+Date/Publication: 2017-06-15 00:08:02 UTC

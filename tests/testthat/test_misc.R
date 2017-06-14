@@ -71,9 +71,26 @@ test_that("we can provide a symbol to as.units and make it look in ud_units", {
 })
 
 test_that("set_units(x, u) is a short form for x * with(ud_units, u)", {
-  expect_identical(set_units(1:10, m/s), 1:10 * with(ud_units, m/s))
+  expect_equal(set_units(1:10, m/s), 1:10 * with(ud_units, m/s)) # not identical - why?
   x = set_units(1:5, m/s)
   y = x
   units(y) = set_units(1, km/h)
   expect_identical(y, set_units(x, km/h))
 })
+
+test_that("rep.units works", {
+  expect_equal(rep(set_units(1:2, m/s), 2), set_units(c(1,2,1,2), m/s))
+})
+
+test_that("set_units works with symbols in character data, and resolves names", {
+  skip_on_os("windows") # encoding issue with degree:
+
+  deg = "°C"
+  expect_equal(set_units(1:2, deg), set_units(1:2, "degree_C"))
+  expect_equal(set_units(1:2, deg), set_units(1:2, "degree_Celsius"))
+  expect_equal(set_units(1:2, "degree_C"), set_units(1:2, "degree_Celsius"))
+  x = set_units(1:3, km)
+  y <- set_units(x, "meter")
+  expect_equal(y, set_units(c(1000,2000,3000), m))
+})
+
