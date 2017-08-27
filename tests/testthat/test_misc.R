@@ -24,7 +24,7 @@ test_that("We can concatenate units if their units can be converted", {
   expect_equal(length(z), length(x) + length(y))
   expect_equal(as.character(units(z)), "m")
   expect_equal(x, z[1:4])
-  expect_equal(as.units(y, units(make_unit("m"))), z[1:4 + 4])
+  expect_equal(as_units(y, units(make_unit("m"))), z[1:4 + 4])
 })
 
 test_that("We can use diff on a units object", {
@@ -51,20 +51,20 @@ test_that("parse_unit works", {
   expect_equal(u, u0)
 })
 
-test_that("as_cf works", {
+test_that("deparse_unit works", {
   str = "kg m-2 s-1"
   u = parse_unit(str)
-  str0 = as_cf(u)
+  str0 = deparse_unit(u)
   expect_equal(str, str0)
 })
 
-test_that("we can provide a symbol to as.units and make it look in ud_units", {
-  five_ha <- as.units(5, ha) # ha pulled from ud_units
+test_that("we can provide a symbol to as_units and make it look in ud_units", {
+  five_ha <- as_units(5, ha) # ha pulled from ud_units
   expect_equal(as.numeric(five_ha), 5)
   expect_equal(units(five_ha), units(ud_units$ha))
   
   ha <- make_unit("m") # make sure that user-defined units overrule
-  five_ha <- as.units(5, ha) # ha pulled from ud_units
+  five_ha <- as_units(5, ha) # ha pulled from ud_units
   expect_equal(as.numeric(five_ha), 5)
   expect_equal(units(five_ha), units(ud_units$m))
   
@@ -89,8 +89,16 @@ test_that("set_units works with symbols in character data, and resolves names", 
   expect_equal(set_units(1:2, deg), set_units(1:2, "degree_C"))
   expect_equal(set_units(1:2, deg), set_units(1:2, "degree_Celsius"))
   expect_equal(set_units(1:2, "degree_C"), set_units(1:2, "degree_Celsius"))
+  expect_equal(set_units(1:2, degree_C), set_units(1:2, degree_Celsius))
+  expect_equal(set_units(1:2, deg), set_units(1:2, degree_Celsius))
   x = set_units(1:3, km)
   y <- set_units(x, "meter")
   expect_equal(y, set_units(c(1000,2000,3000), m))
 })
 
+test_that("all.equal works", {
+  expect_true(all.equal(set_units(1, m/s), set_units(3.6, km/h)))
+  expect_true(set_units(1, m/s) == set_units(3.6, km/h))
+  expect_true(all.equal(set_units(3.6, km/h), set_units(1, m/s)))
+  expect_false(set_units(3.6, km/h) == set_units(1, m/s))
+})

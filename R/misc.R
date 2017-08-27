@@ -12,7 +12,7 @@ c.units <- function(..., recursive = FALSE) {
                    "has units that are not convertible to that of the first argument"))
     }
   x = unlist(args)
-  as.units(x, u)
+  as_units(x, u)
 }
 
 .as.units = function(x, value) {
@@ -44,8 +44,8 @@ rep.units = function(x, ...) {
 #' @details see also \code{demo(cf)} for parsing units in the CF standard name table. Note that \code{parse_unit} currently fails on expressions containing a \code{/}, such as \code{m/s-1}.
 #' @export
 parse_unit = function(str) {
-	if (length(grep("/", str)) > 0)
-		stop("parse_unit does not parse unit strings containing `/'")
+	if (length(grep(c("[*/]"), str)) > 0)
+		stop("parse_unit does not parse unit strings containing `*' or `/'")
 	parse_one = function(str) {
 		r <- regexpr("[-0-9]+", str)
 		if (r == -1)
@@ -84,12 +84,13 @@ parse_unit = function(str) {
 #' 
 #' deparse unit to string in product power form (e.g. km m-2 s-1)
 #' @param x object of class units
+#' @return length one character vector
 #' @examples 
 #' u = parse_unit("kg m-2 s-1")
 #' u
-#' as_cf(u)
+#' deparse_unit(u)
 #' @export
-as_cf = function(x) {
+deparse_unit = function(x) {
 	stopifnot(inherits(x, "units"))
 	u = units(x)
 	tn = table(u$numerator)
@@ -100,6 +101,20 @@ as_cf = function(x) {
 	nm2 = names(td)
 	vals2 = as.character(td)
 	paste(c(paste0(nm1, vals1), paste0(nm2, vals2)), collapse=" ")
+}
+
+#' @export
+#' @name deparse_unit
+#' @details \code{as_cf} is deprecated; use \code{deparse_unit}.
+as_cf = function(x) {
+	# .Deprecated("deparse_unit") # nocov
+	deparse_unit(x)             # nocov
+}
+
+#' @export
+all.equal.units = function(target, current, ...) {
+	current = set_units(current, units(target))
+	all.equal(unclass(target), unclass(current), ...)
 }
 
 #' type_sum for tidy tibble printing

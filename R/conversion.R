@@ -87,12 +87,18 @@ set_units = function(x, value, ...) UseMethod("set_units")
 #' @name units
 #' @export
 set_units.units = function(x, value, ...) {
-  e = try(u <- eval(substitute(value), ud_units, parent.frame()))
-  if (inherits(e, "try-error") || ! (inherits(u, "units") || inherits(u, "symbolic_units"))) {
-	stopifnot(is.character(value))
-	if (! value %in% names(ud_units))
-		value = ud.get.symbol(value)
-  	u = ud_units[[ value ]]
+  e = try(u <- eval(substitute(value), ud_units, parent.frame()), silent = TRUE)
+  if (inherits(e, "try-error") || ! (inherits(u, "units") 
+        || inherits(u, "symbolic_units"))) {
+	val_char = gsub("\"", "", deparse(substitute(value)))
+	u = if (val_char %in% names(ud_units))
+  	  ud_units[[ val_char ]]
+	else if (ud.is.parseable(val_char)) {
+      if (ud.get.symbol(val_char) != "")
+        val_char = ud.get.symbol(val_char)
+      make_unit(val_char)
+	} else if (ud.is.parseable(eval(value)))
+	  make_unit(eval(value))
   }
   units(x) = u
   x
@@ -100,16 +106,26 @@ set_units.units = function(x, value, ...) {
 
 #' @name units
 #' @export
-set_units.numeric = function(x, value = unitless, ...) {
-  e = try(u <- eval(substitute(value), ud_units, parent.frame()))
-  if (inherits(e, "try-error") || ! (inherits(u, "units") || inherits(u, "symbolic_units"))) {
-	stopifnot(is.character(value))
-	if (! value %in% names(ud_units))
-		value = ud.get.symbol(value)
-  	u = ud_units[[ value ]]
+set_units.numeric = function(x, value = units::unitless, ...) {
+  e = try(u <- eval(substitute(value), ud_units, parent.frame()), silent = TRUE)
+  if (inherits(e, "try-error") || ! (inherits(u, "units") 
+          || inherits(u, "symbolic_units"))) {
+	val_char = gsub("\"", "", deparse(substitute(value)))
+	u = if (val_char %in% names(ud_units))
+  	  ud_units[[ val_char ]]
+	else if (ud.is.parseable(val_char)) {
+      if (ud.get.symbol(val_char) != "")
+        val_char = ud.get.symbol(val_char)
+      make_unit(val_char)
+	} else if (ud.is.parseable(eval(value)))
+	  make_unit(eval(value))
   }
-  units(x) = u
-  x
+  if (inherits(u, "units"))
+    x * u
+  else {
+    units(x) = u
+    x
+  }
 }
 
 #' retrieve measurement units from \code{units} object
@@ -127,13 +143,20 @@ units.units <- function(x) {
 #' @param value target unit, defaults to `unitless`
 #'
 #' @export
-as.units <- function(x, value = unitless) {
-  UseMethod("as.units")
+as_units <- function(x, value = unitless) {
+  UseMethod("as_units")
 }
 
 #' @export
-#' @name as.units
-as.units.default <- function(x, value = unitless) {
+#' @name as_units
+as.units <- function(x, value = unitless) {
+	# .Deprecated("as_units")    # nocov
+	as_units(x, value = value) # nocov
+}
+
+#' @export
+#' @name as_units
+as_units.default <- function(x, value = unitless) {
 
   unit_name <- substitute(value)
   if (is.symbol(unit_name)) {
@@ -152,13 +175,13 @@ as.units.default <- function(x, value = unitless) {
 #' convert difftime objects to units
 #'
 #' @export
-#' @name as.units
+#' @name as_units
 #' 
 #' @examples
 #' s = Sys.time()
 #' d  = s - (s+1)
-#' as.units(d)
-as.units.difftime <- function(x, value) {
+#' as_units(d)
+as_units.difftime <- function(x, value) {
   u <- attr(x, "units")
   x <- unclass(x)
   attr(x, "units") <- NULL
@@ -192,17 +215,16 @@ as.data.frame.units <- as.data.frame.numeric
 #' @param x object of class \code{units}
 #'
 #' @export
-#' @details \link{as.difftime} is not a generic, hence this strange name.
 #' @examples
 #' 
 #' t1 = Sys.time() 
 #' t2 = t1 + 3600 
 #' d = t2 - t1
-#' du <- as.units(d)
-#' dt = as.dt(du)
+#' du <- as_units(d)
+#' dt = as_difftime(du)
 #' class(dt)
 #' dt
-as.dt <- function(x) {
+as_difftime <- function(x) {
   stopifnot(inherits(x, "units"))
   u <- as.character(units(x))
   if (u == "s")
@@ -232,10 +254,40 @@ as.dt <- function(x) {
 # #' }
 # #' @export
 # as.hms.units = function(x, ...) {
-# 	hms::as.hms(as.dt(x), ...)
+# 	hms::as.hms(as_difftime(x), ...)
 # }
 
 
 #' @export
 `[.units` <- function(x, i, j,..., drop = TRUE)
   structure(NextMethod(), "units" = units(x), class = "units")
+
+#' @export
+as.POSIXct.units = function (x, tz = "UTC", ...) {
+	u1 = set_units(x, "seconds since 1970-01-01 00:00:00 +00:00")
+	as.POSIXct.numeric(as.numeric(u1), tz = tz, origin = as.POSIXct("1970-01-01 00:00:00", tz = "UTC"))
+}
+
+#' @export
+as.Date.units = function (x, ...) {
+	u1 = set_units(x, "days since 1970-01-01")
+	as.Date(as.numeric(u1), origin = as.Date("1970-01-01 00:00:00"))
+}
+
+#' @export
+as_units.POSIXt = function(x, value) {
+	u = set_units(as.numeric(as.POSIXct(x)), "seconds since 1970-01-01 00:00:00 +00:00")
+	if (missing(value))
+		u
+	else
+		set_units(u, value)
+}
+
+#' @export
+as_units.Date = function(x, value) {
+	u = set_units(as.numeric(x), "days since 1970-01-01")
+	if (missing(value))
+		u
+	else
+		set_units(u, value)
+}
