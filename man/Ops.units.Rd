@@ -26,7 +26,13 @@ b <- set_units(1:3, m/s)
 a + b
 a * b
 a / b
-a <- make_unit("kg m-3") # not understood by R as a division, but understood by udunits2
+a <- as_units("kg m-3")
 b <- set_units(1, kg/m/m/m)
 a + b
+a = set_units(1:5, m)
+a \%/\% a
+a \%/\% set_units(2)
+set_units(1:5, m^2) \%/\% set_units(2, m)
+a \%\% a
+a \%\% set_units(2 )
 }

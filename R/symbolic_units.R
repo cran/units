@@ -33,11 +33,12 @@ Ops.symbolic_units <- function(e1, e2) {
   
   eq <- switch(.Generic, "==" = , "!=" = TRUE, FALSE)
   if (eq) {
-    if (.Generic == "==") return(.same_units(e1, e2))
-    else return(!.same_units(e1, e2))
-  }
-  
-  stop(paste("operation", .Generic, "not allowed for symbolic operators")) # nocov
+    if (.Generic == "==") 
+      .same_units(e1, e2)
+    else 
+      !.same_units(e1, e2)
+  } else
+    stop(paste("operation", .Generic, "not allowed for symbolic operators")) # nocov
 }
 
 #' The "unit" type for vectors that are actually dimension-less.
@@ -116,30 +117,22 @@ as.character.symbolic_units <- function(x, ...,
   }
 }
 
-#' Create a new unit from a unit name.
-#' 
-#' @param name  Name of the new unit
-#' @return A new unit object that can be used in arithmetics
-#' 
-#' @export
-make_unit <- function(name) {
-  as_units.default(1, .symbolic_units(name))
-}
-
 .simplify_units <- function(value, sym_units) {
   
   # This is just a brute force implementation that takes each element in the
   # numerator and tries to find a value in the denominator that can be converted
   # to the same unit. It modifies "value" to rescale the nominator to the denomiator
   # before removing matching units.
+
+  drop_ones = function(u) u[ u != "1" ]
   
-  new_numerator <- sym_units$numerator
-  new_denominator <- sym_units$denominator
+  new_numerator <- drop_ones(sym_units$numerator)
+  new_denominator <- drop_ones(sym_units$denominator)
   
   delete_num <- c()
   for (i in seq_along(new_numerator)) {
     str1 <- new_numerator[i]
-    
+
     for (j in seq_along(new_denominator)) {
       str2 <- new_denominator[j]
 

@@ -1,0 +1,24 @@
+help of ?set_units: ... ; mention NSE
+
+
+# This should not occur:
+> units(b) = "10 m"
+> b
+Units: ^10*m
+[1] 1 2 3
+
+
+# This should be an error:
+> b = 1:3
+> units(b) = "10*m"
+Warning message:
+In ‘10 * m’ the numeric multiplier ‘10’ was discarded. 
+The returned unit object was coerced to a value of 1.
+Use `install_conversion_constant()` to define a new unit that is a multiple of another unit. 
+
+
+# This should not occur:
+> set_units(1:3, as_units("m"))
+Units: 1
+[1] 1 2 3
+

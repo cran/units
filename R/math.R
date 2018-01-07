@@ -10,8 +10,8 @@
 #' @export
 #' 
 #' @examples
-#' a = sqrt(1:10)
-#' a <- with(ud_units, a * m/s)
+#' a <- sqrt(1:10)
+#' a <- set_units(a, m/s)
 #' log(a)
 #' log(a, base = 10)
 #' cumsum(a)
@@ -21,11 +21,19 @@ Math.units = function(x, ...) {
                "trunc" = , "round" = , "signif" = , "cumsum" = , 
                "cummax" = , "cummin" = TRUE, FALSE)
 
-  rad <- NULL # satisfy codetools warning
-  if (!OK && units(x) == units(set_units(1, rad))) {
-    OK <- switch(.Generic, "sin" = , "cos" = , "tan" = TRUE, FALSE)
+  rad = units(make_unit("rad"))
+  deg = units(make_unit("degree"))
+  if (!OK && (units(x) == rad || units(x) == deg)) {
+    OK <- switch(.Generic, sin =, cos =, tan =, sinpi =, cospi =, tanpi = TRUE, FALSE)
+    if (OK) {
+	  units(x) <- "rad" # convert deg -> rad
+	  x <- set_units(x) # result has unit 1
+	}
+  }
+  if (!OK && units(x) == unitless) {
+    OK <- switch(.Generic, asin =, acos =, atan = TRUE, FALSE)
     if (OK)
-	  x <- set_units(x, unitless)
+	  units(x) <- "rad" # unit of the answer (also unitless)
   }
 
   if (!OK) {
@@ -47,7 +55,7 @@ Math.units = function(x, ...) {
         u = paste0("lb(",units(x),")")
       else
         stop(paste("log with base", dts$base, "not supported"))
-      .as.units(NextMethod(.Generic), units(make_unit(u)))
+      .as.units(NextMethod(.Generic), units(symbolic_unit(u, check_is_valid = FALSE)))
       # nocov end
     } else
       .as.units(NextMethod(.Generic), units(x))
