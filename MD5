@@ -1,4 +1,4 @@
-c9a7cfa38a6be8ac7ee819b8fec09728 *DESCRIPTION
+b7953f61b56fee1d715c9aceded3c7cf *DESCRIPTION
 03c8b5ed76edeb1b089770c4718d74c4 *NAMESPACE
 722edac4017336fcb491f71ae8a80d0d *NEWS.md
 6954a07edeb7dbd3a9b98c6c1c0637b8 *R/arith.R
@@ -15,7 +15,7 @@ e49636efb8042a2a4212ae8058ea7375 *R/summaries.R
 2f098c30cd5eb8f1b1e29947087d1fc3 *R/sysdata.rda
 4cb55dac4179c28a5e2b950e952bb62d *R/ud_units.R
 546847c019b52f003249865aa7b56f53 *R/user_conversion.R
-8679d5ba7d94d858a8fd2c6ede6d1c80 *R/valid_udunits.R
+0fd0536658833092610121ec90fb6a1c *R/valid_udunits.R
 2e9961123bef6ea52f0a087d7b8b4d04 *TODO
 b41f10271f1e5bbeb4be592f39a67495 *build/vignette.rds
 a5b1424e81e8a55f734e0ec33b67129b *demo/00Index
@@ -28,7 +28,7 @@ dc73d005348b9322dc6e23c43fa5d6d9 *inst/doc/measurement_units_in_R.Rmd
 94509ec75aaa51a3919cf0bc6d2d047b *inst/doc/measurement_units_in_R.html
 c76664843f4ba1b0671d13540043d688 *inst/doc/units.R
 dbfc5ec4aaaffc153d301008da35269c *inst/doc/units.Rmd
-91eb12d17e306220d25930f344cee330 *inst/doc/units.html
+bdb749d4bab9b6123a0dfb3a77c62d41 *inst/doc/units.html
 f771d36503b9e6c3ef740e1e1f033ece *man/Math.units.Rd
 9afed6e4d36c8a4b66fd6f904f0c8397 *man/Ops.units.Rd
 4f82d72ec5f9c4544840b87864cbd893 *man/as_difftime.Rd
