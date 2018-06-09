@@ -20,7 +20,7 @@
 }
 
 .same_units <- function(e1, e2) {
-  all(e1$numerator == e2$numerator) && all(e1$denominator == e2$denominator)
+  identical(e1$numerator, e2$numerator) && identical(e1$denominator, e2$denominator)
 }
 
 # Inside the group generic functions we do have .Generic even if the diagnostics
@@ -86,7 +86,7 @@ as.character.symbolic_units <- function(x, ...,
   denominator <- x$denominator
   if (escape_units) {
     numerator <- unlist(Map(function(name) paste0("`", name, "`", sep = ""), numerator))
-    denoinator <- unlist(Map(function(name) paste0("`", name, "`", sep = ""), denominator))
+    denominator <- unlist(Map(function(name) paste0("`", name, "`", sep = ""), denominator))
   }
   
   if (length(numerator) == 0) {
@@ -119,16 +119,23 @@ as.character.symbolic_units <- function(x, ...,
 
 .simplify_units <- function(value, sym_units) {
   
+  simplify = .units.simplify()
+  if (!is.na(simplify) && !simplify) {
+  	value = as.numeric(value)
+	units(value) = sym_units
+  	return(value)
+  }
+
   # This is just a brute force implementation that takes each element in the
   # numerator and tries to find a value in the denominator that can be converted
   # to the same unit. It modifies "value" to rescale the nominator to the denomiator
   # before removing matching units.
 
   drop_ones = function(u) u[ u != "1" ]
+  class(value) <- "units"
   
   new_numerator <- drop_ones(sym_units$numerator)
   new_denominator <- drop_ones(sym_units$denominator)
-  
   delete_num <- c()
   for (i in seq_along(new_numerator)) {
     str1 <- new_numerator[i]
@@ -137,7 +144,8 @@ as.character.symbolic_units <- function(x, ...,
       str2 <- new_denominator[j]
 
       if (are_convertible(str1, str2)) {
-        value <- convert(value, str1, str2)
+        attr(value, "units") <- units(as_units(str1))
+        units(value) <- str2
         delete_num <- c(delete_num, i)
         new_denominator <- new_denominator[-j]
         break
@@ -148,5 +156,5 @@ as.character.symbolic_units <- function(x, ...,
   if (length(delete_num) > 0)
     new_numerator <- new_numerator[-delete_num]
   
-  as_units(value, .symbolic_units(new_numerator, new_denominator))
+  as_units(drop_units(value), .symbolic_units(new_numerator, new_denominator))
 }

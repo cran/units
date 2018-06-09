@@ -1,20 +1,12 @@
-NULL
-#' @import utils
-#' @import stats
-#' @import udunits2
-NULL
-
 # Helper functions for testing if we can convert and how using either
 # user-defined conversion functions or udunits.
 are_convertible <- function(from, to) {
-  user_are_convertible(from, to) || udunits2::ud.are.convertible(from, to)
+  ud_are_convertible(from, to)
 }
 
 convert <- function(value, from, to) {
-  value <- unclass(value)
-  if (user_are_convertible(from, to)) user_convert(value, from, to)
-  else if (udunits2::ud.are.convertible(from, to)) udunits2::ud.convert(value, from, to)
-  else NA
+  stopifnot(ud_are_convertible(from, to))
+  ud_convert(unclass(value), from, to)
 }
 
 #' Set measurement units on a numeric vector
@@ -23,13 +15,14 @@ convert <- function(value, from, to) {
 #' @param value object of class \code{units} or \code{symbolic_units}, or in the case of \code{set_units} expression with symbols that can be resolved in \link{ud_units} (see examples).
 #'
 #' @return object of class \code{units}
+#' @details if \code{value} is of class \code{units} and has a value unequal to 1, this value is ignored unless \code{units_options("simplifiy")} is \code{TRUE}. If \code{simplify} is \code{TRUE}, \code{x} is multiplied by this value.
 #' @export
 #' @name units
 #'
 #' @examples
 #' x = 1:3
 #' class(x)
-#' units(x) <- with(ud_units, m/s) # valid
+#' units(x) <- as_units("m/s")
 #' class(x)
 #' y = 2:5
 `units<-.numeric` <- function(x, value) {
@@ -39,9 +32,12 @@ convert <- function(value, from, to) {
   if(!inherits(value, "units") && !inherits(value, "symbolic_units"))
     value <- as_units(value)
   
-  if (inherits(value, "units"))
+  if (inherits(value, "units")) {
+    if (isTRUE(.units.simplify()))
+      x <- x * unclass(value)
     value <- units(value)
-  
+  }
+ 
   attr(x, "units") = value
   class(x) <- "units"
   x
@@ -64,8 +60,11 @@ convert <- function(value, from, to) {
   if(!inherits(value, "units") && !inherits(value, "symbolic_units"))
     value <- as_units(value)
   
-  if (inherits(value, "units"))
+  dimx = dim(x)
+  if (inherits(value, "units")) {
+    x <- x * unclass(value)
     value <- units(value)
+  }
   
   if (identical(units(x), value)) # do nothing; possibly user-defined units:
     return(x)
@@ -74,7 +73,7 @@ convert <- function(value, from, to) {
   str2 <- as.character(value)
 
   if (are_convertible(str1, str2)) 
-    structure(convert(x, str1, str2), units = value, class = "units")
+    structure(convert(x, str1, str2), units = value, dim = dimx, class = "units")
   else
     stop(paste("cannot convert", units(x), "into", value), call. = FALSE)
 }
@@ -138,6 +137,7 @@ as_units.symbolic_units <- function(x, value, ...) {
 #' @export
 #' @name as_units
 as_units.default <- function(x, value = unitless, ...) {
+  if (is.null(x)) return(x)
   units(x) <- value
   x
 }
@@ -234,7 +234,11 @@ as_difftime <- function(x) {
 
 
 #' @export
-`[.units` <- function(x, i, j,..., drop = TRUE)
+`[.units` <- function(x, i, j, ..., drop = TRUE)
+  structure(NextMethod(), "units" = units(x), class = "units")
+
+#' @export
+`[[.units` <- function(x, i, j, ...)
   structure(NextMethod(), "units" = units(x), class = "units")
 
 #' @export

@@ -2,44 +2,46 @@
 % Please edit documentation in R/user_conversion.R
 \name{install_conversion_constant}
 \alias{install_conversion_constant}
-\title{Install a function for conversion between user-defined units.}
+\alias{install_conversion_constant}
+\alias{install_conversion_offset}
+\title{Install a conversion constant or offset between user-defined units.}
 \usage{
 install_conversion_constant(from, to, const)
+
+install_conversion_offset(from, to, const)
 }
 \arguments{
 \item{from}{String for the symbol of the unit being converted from.}
 
-\item{to}{String for the symbol of the unit being converted to.}
+\item{to}{String for the symbol of the unit being converted to. One of \code{from} and \code{to} must be an existing unit name.}
 
 \item{const}{The constant \eqn{\alpha} in the conversion.}
 }
 \description{
 Tells the \code{units} package how to convert between units that
   have a linear relationship, i.e. can be related on the form \eqn{y = \alpha
-  x}.
+  x} (constant) or \eqn{y = \alpha + x} (offset).
 }
 \details{
 This function handles the very common case where units are related 
   through a linear function, that is, you can convert from one to the other 
   as \eqn{y = \alpha x}. Using this function, you specify that you
-  can go from values of type \code{from} to values of type \code{to} by first
-  multiplying a constant and then adding an offset. The function then
-  automatically installs that conversion and the invers \eqn{x =
-  y/\alpha}.
-  
-  For a more general conversion mechanism, see
-  \code{\link{install_conversion_function}}.
+  can go from values of type \code{from} to values of type \code{to} by 
+  multiplying by a constant, or adding a constant.
 }
 \examples{
 
 # one orange is worth two apples
-install_conversion_constant("orange", "apple", 2)
+install_symbolic_unit("orange")
+install_conversion_constant("orange", "apple", 2) # apple = 2 * orange
 apples <- 2 * as_units("apple")
 oranges <- 1 * as_units("orange")
 apples + oranges
 oranges + apples
 
-}
-\seealso{
-\code{\link{install_conversion_function}}
+install_conversion_offset("meter", "newmeter", 1)
+m = set_units(1:3, meter)
+n = set_units(1:3, newmeter)
+m + n
+n + m
 }

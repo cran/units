@@ -108,6 +108,8 @@ test_that("we can subscript units", {
   y <- x * as_units("m")
   expect_equal(as.numeric(y[1]), x[1])
   expect_equal(class(y[1]), class(y))
+  expect_equal(as.numeric(y[[1]]), x[[1]])
+  expect_equal(class(y[[1]]), class(y))
 })
 
 test_that("m + m*s is an error", {
@@ -119,8 +121,7 @@ test_that("m + m*s is an error", {
 test_that("we can convert between units that are not simply a scalar from each other", {
   m <- 0 * as_units("degC")
   units(m) <- as_units("degK")
-  expect_equal(as.numeric(m), udunits2::ud.convert(0, "degC", "degK"))  
-  #expect_equal(as.character(units(m)), "degK")
+  expect_equal(as.numeric(m), units:::ud_convert(0, "degC", "degK"))  
   expect_equal(as.character(units(m)), "K")
   
   temp <- 75 * as_units('degF')
@@ -130,3 +131,32 @@ test_that("we can convert between units that are not simply a scalar from each o
   expect_equal(units(result), unitless)
 })
 
+test_that("dim propagates", {
+  y = x = set_units(matrix(1:4,2), m)
+  units(y) = make_unit("mm")
+  expect_equal(dim(x), dim(y))
+})
+
+test_that("conversion of g/kg to dimensionless is not the default", {
+	a_orig <- a <- 1:10
+	units(a) = as_units("mg/kg")
+	expect_equal(as.numeric(a), a_orig)
+})
+
+test_that("conversion to dimensionless with prefix works (g/kg) if simplify=TRUE", {
+	a_orig <- a <- 1:10
+	units_options(simplify = TRUE)
+	units(a) = as_units("mg/kg")
+	expect_equal(as.numeric(a), a_orig/1e6)
+	units(a) = as_units("kg/mg")
+	expect_equal(a, a_orig)
+	units(a) = as_units("g/g")
+	expect_equal(a, a_orig)
+	units(a) = as_units("kg/g")
+	expect_equal(a, a_orig * 1000)
+	units_options(simplify = NA)
+})
+
+test_that("a NULL value returns NULL", {
+  expect_null(as_units(NULL))
+})

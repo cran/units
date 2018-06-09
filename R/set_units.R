@@ -22,7 +22,11 @@
 #' @export
 #' @rdname set_units
 #' @seealso \code{\link{as_units}}
-set_units <- function(x, value, ..., mode = units_options("set_units_mode")) {
+set_units <- function(x, value, ..., mode = units_options("set_units_mode"))
+  UseMethod("set_units")
+
+#' @export
+set_units.numeric <- function(x, value, ..., mode = units_options("set_units_mode")) {
   
   if (missing(value))
     value <- unitless
@@ -33,9 +37,12 @@ set_units <- function(x, value, ..., mode = units_options("set_units_mode")) {
       stop("The only valid number defining a unit is '1', signifying a unitless unit")
   }
   
-  if (is.null(value))
-    return(drop_units(x))
-  
   units(x) <- as_units(value, ...)
   x
 }
+
+#' @export
+set_units.logical <- set_units.numeric
+
+#' @export
+set_units.units <- set_units.numeric

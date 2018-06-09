@@ -1,18 +1,28 @@
 #' @export
 c.units <- function(..., recursive = FALSE) {
   args <- list(...)
-  u = units(args[[1]])
-  if (length(args) > 1)
-    for (i in 2:length(args)) {
-      if (!inherits(args[[i]], "units"))
-        stop(paste("argument", i, "is not of class units"))
-      tr = try(units(args[[i]]) <- u)
-      if (class(tr) == "try-error")
-        stop(paste("argument", i, 
-                   "has units that are not convertible to that of the first argument"))
-    }
-  x = unlist(args)
-  as_units(x, u)
+  u <- units(args[[1]])
+  if (.convert_to_first_arg(args))
+    do.call(c, c(args, recursive=recursive))
+  else structure(NextMethod(), units = u, class = "units")
+}
+
+.convert_to_first_arg <- function(dots, env.=parent.frame()) {
+  dots <- deparse(substitute(dots))
+  modified <- FALSE
+  u <- units(env.[[dots]][[1]])
+  for (i in seq_along(env.[[dots]])[-1]) {
+    if (!inherits(env.[[dots]][[i]], "units"))
+      stop(paste("argument", i, "is not of class units"))
+    if (units(env.[[dots]][[i]]) == u)
+      next
+    if (!ud_are_convertible(units(env.[[dots]][[i]]), u))
+      stop(paste("argument", i, 
+                 "has units that are not convertible to that of the first argument"))
+    units(env.[[dots]][[i]]) <- u
+    modified <- TRUE
+  }
+  modified
 }
 
 .as.units = function(x, value) {
@@ -151,7 +161,6 @@ seq.units = function(from, to, by = ((to - from)/(length.out - 1)),
 #' @name tibble
 #' @param x see \link[pillar]{type_sum}
 #' @param ... see \link[pillar]{type_sum}
-#' @param 
 #' @export
 type_sum.units <- function(x, ...) {
   paste0("[", as.character(units(x)), "]")
@@ -164,6 +173,13 @@ pillar_shaft.units <- function(x, ...) {
   u_char <- as.character(units(x))
   if (! requireNamespace("pillar", quietly = TRUE))
     stop("package pillar not available: install first?")
-  out <- paste(format(unclass(x), ...), pillar::style_subtle(u_char))
+  #out <- paste(format(unclass(x), ...), pillar::style_subtle(u_char))
+  out <- format(unclass(x), ...)
   pillar::new_pillar_shaft_simple(out, align = "right", min_width = 8)
+}
+
+#' @export
+str.units = function(object, ...) {
+	cat("Object of class units:\n")
+	str(unclass(object), ...)
 }
