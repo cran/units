@@ -2,7 +2,6 @@
 % Please edit documentation in R/user_conversion.R
 \name{install_conversion_constant}
 \alias{install_conversion_constant}
-\alias{install_conversion_constant}
 \alias{install_conversion_offset}
 \title{Install a conversion constant or offset between user-defined units.}
 \usage{
@@ -44,4 +43,7 @@ m = set_units(1:3, meter)
 n = set_units(1:3, newmeter)
 m + n
 n + m
+}
+\seealso{
+\code{\link{install_symbolic_unit}}, \code{\link{remove_symbolic_unit}}
 }

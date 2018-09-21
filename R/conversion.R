@@ -33,8 +33,12 @@ convert <- function(value, from, to) {
     value <- as_units(value)
   
   if (inherits(value, "units")) {
+	if (any(is.na(value)))
+	  stop("a missing value for units is not allowed")
     if (isTRUE(.units.simplify()))
       x <- x * unclass(value)
+	else if (any(unclass(value) != 1.0))
+	  warning(paste("numeric value", unclass(value), "is ignored in unit assignment"))
     value <- units(value)
   }
  
@@ -49,20 +53,26 @@ convert <- function(value, from, to) {
 #' @export
 #' 
 #' @examples
-#' a <- with(ud_units, 1:3 * m/s)
+#' a <- set_units(1:3, m/s)
 #' units(a) <- with(ud_units, km/h)
+#' a
+#' # convert to a mixed_units object:
+#' units(a) = c("m/s", "km/h", "km/h")
 #' a
 `units<-.units` <- function(x, value) {
   
   if(is.null(value))
     return(drop_units(x))
   
-  if(!inherits(value, "units") && !inherits(value, "symbolic_units"))
+  if(!inherits(value, "units") && !inherits(value, "symbolic_units")) {
+	if ((is.character(value) && length(value) > 1))
+	  return(set_units(mixed_units(x), value))
     value <- as_units(value)
+  }
   
   dimx = dim(x)
   if (inherits(value, "units")) {
-    x <- x * unclass(value)
+    x <- .as.units(unclass(x) * unclass(value), units(x))
     value <- units(value)
   }
   
@@ -73,15 +83,15 @@ convert <- function(value, from, to) {
   str2 <- as.character(value)
 
   if (are_convertible(str1, str2)) 
-    structure(convert(x, str1, str2), units = value, dim = dimx, class = "units")
+    .as.units(convert(x, str1, str2), value, dim = dimx)
   else
     stop(paste("cannot convert", units(x), "into", value), call. = FALSE)
 }
 
-unit_ambiguous = function(value) {
-  msg = paste("ambiguous argument:", value, "is interpreted by its name, not by its value")
-  warning(msg, call. = FALSE)
-}
+#unit_ambiguous = function(value) {
+#  msg = paste("ambiguous argument:", value, "is interpreted by its name, not by its value")
+#  warning(msg, call. = FALSE)
+#}
 
 
 #' @name units
@@ -131,7 +141,7 @@ as_units.units <- function(x, value, ...) {
 as_units.symbolic_units <- function(x, value, ...) {
   if(!missing(value))
     warning("supplied value ignored")
-  structure(1L, units = x, class = "units")
+  .as.units(1L, x)
 }
 
 #' @export
@@ -178,12 +188,18 @@ as_units.difftime <- function(x, value, ...) {
 }
 
 #' @export
-as.data.frame.units <- function(x, ...) {
-	df = as.data.frame(unclass(x), ...)
+as.data.frame.units <- function(x, row.names = NULL, optional = FALSE, ...) {
+	df = as.data.frame(unclass(x), row.names, optional, ...)
+	if (!optional && ncol(df) == 1)
+	  colnames(df) <- deparse(substitute(x))
 	for (i in seq_along(df))
 		units(df[[i]]) = units(x)
 	df
 }
+
+#' @export
+as.list.units <- function(x, ...)
+  mapply(set_units, unclass(x), x, mode="standard", SIMPLIFY=FALSE)
 
 #' convert units object into difftime object
 #'
@@ -235,11 +251,11 @@ as_difftime <- function(x) {
 
 #' @export
 `[.units` <- function(x, i, j, ..., drop = TRUE)
-  structure(NextMethod(), "units" = units(x), class = "units")
+  .as.units(NextMethod(), units(x))
 
 #' @export
 `[[.units` <- function(x, i, j, ...)
-  structure(NextMethod(), "units" = units(x), class = "units")
+  .as.units(NextMethod(), units(x))
 
 #' @export
 as.POSIXct.units = function (x, tz = "UTC", ...) {

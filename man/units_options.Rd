@@ -5,10 +5,11 @@
 \title{set one or more units global options}
 \usage{
 units_options(..., sep, group, negative_power, parse, set_units_mode,
-  auto_convert_names_to_symbols, simplify)
+  auto_convert_names_to_symbols, simplify, allow_mixed, unitless_symbol,
+  convert_to_base)
 }
 \arguments{
-\item{...}{ignored}
+\item{...}{named options (character) for which the value is queried}
 
 \item{sep}{character length two; default \code{c("~", "~")}; space separator between variable and units, and space separator between two different units}
 
@@ -23,15 +24,28 @@ units_options(..., sep, group, negative_power, parse, set_units_mode,
 \item{auto_convert_names_to_symbols}{logical, default \code{TRUE}: should names, such as \code{degree_C} be converted to their usual symbol?}
 
 \item{simplify}{logical, default \code{NA}; simplify units in expressions?}
+
+\item{allow_mixed}{logical; if \code{TRUE}, combining mixed units creates a \code{mixed_units} object, if \code{FALSE} it generates an error}
+
+\item{unitless_symbol}{character; set the symbol to use for unitless (1) units}
+
+\item{convert_to_base}{logical; if \code{TRUE}, convert units to (SI) base units}
+}
+\value{
+in case options are set, invisibly a named list with the option values that are being set; if an option is queried, the current option value.
 }
 \description{
 set units global options, mostly related how units are printed and plotted
 }
 \details{
+This sets or gets units options. Set them by using named arguments, get them by passing the option name.
+
 The default \code{NA} value for \code{simplify} means units are not simplified in \link{set_units} or \link{as_units}, but are simplified in arithmetical expressions.
 }
 \examples{
-units_options(sep = c("~~~", "~"), group = c("", "")) # more space, parenthesis
-## set defaults:
+old = units_options(sep = c("~~~", "~"), group = c("", "")) # more space, parenthesis
+old
+## set back to defaults:
 units_options(sep = c("~", "~"), group = c("[", "]"), negative_power = FALSE, parse = TRUE)
+units_options("group")
 }

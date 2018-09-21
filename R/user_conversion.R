@@ -4,30 +4,35 @@
 #' \code{make_units} and \code{set_units}. No installation is performed if the
 #' unit is already known by udunits.
 #'
-#' @param chr a length 1 character vector that is the unit name or symbol.
+#' @param name a length 1 character vector that is the unit name or symbol.
 #' @param warn warns if the supplied unit symbol is already a valid unit symbol
 #'   recognized by udunits.
+#' @param dimensionless logical; if \code{TRUE}, a new dimensionless unit is created, if \code{FALSE} a new base unit is created. Dimensionless units are convertible to other dimensionless units (such as \code{rad}), new base units are not convertible to other existing units.
 #'
-#' @details \code{install_symbolic_unit} installs a new dimensionless unit; these are directly compatible to any other dimensionless unit. To install a new unit that is a scaled or shifted version of an existing unit, use \code{install_conversion_constatn} or \code{install_conversion_offset} directly.
+#' @details \code{install_symbolic_unit} installs a new dimensionless unit; these are directly compatible to any other dimensionless unit. To install a new unit that is a scaled or shifted version of an existing unit, use \code{install_conversion_constant} or \code{install_conversion_offset} directly.
 #' @export
 #' @rdname install_symbolic_unit
+#' @seealso \code{\link{install_conversion_constant}}, \code{\link{install_conversion_offset}}
 #' @examples
 #' install_symbolic_unit("person")
 #' set_units(1, rad) + set_units(1, person) # that is how dimensionless units work!
-install_symbolic_unit <- function(chr, warn = TRUE) {
-  if(ud_is_parseable(chr)) {
+install_symbolic_unit <- function(name, warn = TRUE, dimensionless = TRUE) {
+  if(ud_is_parseable(name)) {
     if (warn) 
-      warning(sQuote(chr), 
+      warning(sQuote(name), 
 	    " is already a valid unit recognized by udunits; removing and reinstalling.")
-    remove_symbolic_unit(chr)
+    remove_symbolic_unit(name)
   }
-  invisible(R_ut_new_dimensionless_unit(chr))
+  if (dimensionless)
+  	invisible(R_ut_new_dimensionless_unit(name))
+  else
+  	invisible(R_ut_new_base_unit(name))
 }
 
 #' @export
 #' @rdname install_symbolic_unit
-remove_symbolic_unit <- function(chr) {
-	R_ut_remove_unit(chr)
+remove_symbolic_unit <- function(name) {
+	R_ut_remove_unit(name)
 }
 
 #' Install a conversion constant or offset between user-defined units.
@@ -57,6 +62,7 @@ remove_symbolic_unit <- function(chr) {
 #' oranges + apples
 #' 
 #' @export
+#' @seealso \code{\link{install_symbolic_unit}}, \code{\link{remove_symbolic_unit}}
 install_conversion_constant <- function(from, to, const) {
   stopifnot(is.finite(const), const != 0.0)
   if (! xor(ud_is_parseable(from), ud_is_parseable(to)))

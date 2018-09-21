@@ -5,30 +5,23 @@
 #' @export
 Summary.units = function(..., na.rm = FALSE) {
   OK <- switch(.Generic, "sum" = , "min" = , "max" = , "range" = TRUE, FALSE)
-  if (!OK)
+  if (! OK)
     stop(paste("Summary operation", .Generic, "not allowed"))
   
-  args = list(...)
-  u = units(args[[1]])
+  args <- list(...)
   if (length(args) > 1) {
-    for (i in 2:length(args)) {
-      if (!inherits(args[[i]], "units"))
-        stop(paste("argument", i, "is not of class units"))
-      if (!ud_are_convertible(units(args[[i]]), u))
-        stop(paste("argument", i, 
-                   "has units that are not convertible to that of the first argument"))
-      args[[i]] = set_units(args[[i]], u, mode = "standard") # convert to first unit
-    }
-  }
-  args = lapply(args, unclass)
-  # as_units(do.call(.Generic, args), u)
-  as_units(do.call(.Generic, c(args, na.rm = na.rm)), u)
+    args <- do.call(c, args) # turns args into a single units vector
+    do.call(.Generic, c(list(args), na.rm = na.rm)) # concatenate, convert if necessary, re-call with length 1 arg
+  } else
+	.as.units(NextMethod(), units(args[[1]]))
 }
+
 
 #' @export
 print.units = function (x, ...) { # nocov start
+  gr = units_options("group")
   if (is.array(x) || length(x) > 1L) {
-    cat("Units: ", as.character(attr(x, "units")), "\n", sep = "")
+    cat("Units: ", paste0(gr[1], as.character(attr(x, "units")), gr[2]), "\n", sep = "")
     x <- drop_units(x)
     NextMethod()
   } else {
@@ -55,7 +48,9 @@ quantile.units = function(x, ...) {
 
 #' @export
 format.units = function(x, ...) {
-  setNames(paste(NextMethod(), units(x)), names(x))
+  gr = units_options("group")
+  u = paste0(gr[1], units(x), gr[2])
+  setNames(paste(NextMethod(), u), names(x))
 }
 
 #' @export

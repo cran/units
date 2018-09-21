@@ -78,8 +78,6 @@ unitless <- .symbolic_units(vector("character"), vector("character"))
 as.character.symbolic_units <- function(x, ..., 
 		neg_power = get(".units.negative_power", envir = .units_options), 
 		escape_units = FALSE, plot_sep = "") {
-  num_str <- character(0)
-  denom_str <- character(0)
   sep <- plot_sep
 
   numerator <- x$numerator
@@ -89,46 +87,64 @@ as.character.symbolic_units <- function(x, ...,
     denominator <- unlist(Map(function(name) paste0("`", name, "`", sep = ""), denominator))
   }
   
-  if (length(numerator) == 0) {
-    if (! neg_power)
-	  num_str <- "1" # 1/cm^2/h
-  } else {
-    num_str <- .pretty_print_sequence(numerator, "*", FALSE, plot_sep)
-  }
-  
-  if (length(denominator) > 0) {
-    sep <- if (neg_power)
-	    paste0("*", plot_sep)
-	  else
-        "/"
-    denom_str <- .pretty_print_sequence(denominator, sep, neg_power, plot_sep)
+  if (x == unitless) { # xxx
+	 u <- if (escape_units)
+       unlist(Map(function(name) paste0("`", name, "`", sep = ""), 
+	      units_options("unitless_symbol")))
+	 else
+	    units_options("unitless_symbol")
+	 return(u)
   }
 
-  if (length(num_str) == 0) {
-    if (length(denom_str) == 0)
-	  ""
+  num_str <- if (length(numerator) > 0)
+      .pretty_print_sequence(numerator, "*", FALSE, plot_sep)
+    else  { # only denominator:
+      if (! neg_power)
+	    "1" # 1/cm^2/h
+	  else
+	    character(0)
+    }
+  
+  denom_str <- if (length(denominator) > 0) {
+    sep <- if (neg_power)
+      paste0("*", plot_sep)
     else
-	  denom_str
-  } else {
-    if (length(denom_str) == 0)
-      num_str
-    else
-      paste(num_str, denom_str, sep = sep)
-  }
+       "/"
+    .pretty_print_sequence(denominator, sep, neg_power, plot_sep)
+  } else
+    character(0)
+
+  if (length(num_str) == 0)
+    denom_str
+  else if (length(denom_str) == 0)
+    num_str
+  else
+    paste(num_str, denom_str, sep = sep)
+}
+
+to_base <- function(x) {  # https://github.com/r-quantities/units/issues/132
+  u_str = as.character(units(x))
+  u = R_ut_parse(u_str)
+  ft = R_ut_format(u, ascii = TRUE)
+  new = as_units(strsplit(ft, " ")[[1]][2])
+  set_units(x, new, mode = "standard")
 }
 
 .simplify_units <- function(value, sym_units) {
-  
+
   simplify = .units.simplify()
-  if (!is.na(simplify) && !simplify) {
+  if (!is.na(simplify) && !simplify) { # isFALSE(simplify)
   	value = as.numeric(value)
 	units(value) = sym_units
   	return(value)
   }
 
+#  if (isTRUE(units_options("convert_to_base")))
+#    return(to_base(value))
+  
   # This is just a brute force implementation that takes each element in the
   # numerator and tries to find a value in the denominator that can be converted
-  # to the same unit. It modifies "value" to rescale the nominator to the denomiator
+  # to the same unit. It modifies "value" to rescale the nominator to the denominator
   # before removing matching units.
 
   drop_ones = function(u) u[ u != "1" ]

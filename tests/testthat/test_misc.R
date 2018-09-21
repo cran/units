@@ -34,8 +34,8 @@ test_that("We can use diff on a units object", {
 })
 
 test_that("type_sum is available for units objects", {
-  library(tibble)
-  expect_equal(type_sum(as_units("m")), "[m]")
+  skip_if_not_installed("pillar")
+  expect_s3_class(pillar::type_sum(as_units("m")), "type_sum_units")
 })
 
 test_that("parse_unit works", {
@@ -110,4 +110,22 @@ test_that("seq works", {
   seq(set_units(10, m), by = set_units(1, m), length.out = 5)
   seq(set_units(10, m), set_units(19, m))
   seq(set_units(10, m), set_units(.02, km))
+})
+
+test_that("tibble printing works", {
+  skip_if_not_installed("tibble")
+  print(tibble::tibble(a = set_units(1/1:3, m/s)))
+})
+
+test_that("str works", {
+  str(set_units(1/1:3, m/s))
+})
+
+test_that("onload/unload work", {
+  units:::.onUnLoad()
+  units:::.onLoad()
+})
+
+test_that("deprecations work", {
+  expect_warning(parse_unit("m"))
 })

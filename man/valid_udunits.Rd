@@ -2,7 +2,6 @@
 % Please edit documentation in R/valid_udunits.R
 \name{valid_udunits}
 \alias{valid_udunits}
-\alias{valid_udunits}
 \alias{valid_udunits_prefixes}
 \title{Get information about valid units}
 \usage{
@@ -24,7 +23,7 @@ a data frame with columns \code{symbol} , \code{symbol_aliases} ,
 The returned dataframe is constructed at runtime by reading the xml database
 that powers unit conversion in [package:udunits2]. Inspect this dataframe to
 determine what inputs are accepted by \code{as_units} (and the other
-functions it powers: \code{make_units} , \code{set_units} , \code{units<-}).
+functions it powers: \code{as_units} , \code{set_units} , \code{units<-}).
 }
 \details{
 Any entry listed under \code{symbol} , \code{symbol_aliases} , \code{
@@ -37,8 +36,10 @@ Note, this is primarily intended for interactive use, the exact format of the
 returned dataframe may change in the future.
 }
 \examples{
-valid_udunits()
-valid_udunits_prefixes()
-if(interactive())
-  View(valid_udunits())
+if (requireNamespace("xml2", quietly = TRUE)) {
+  valid_udunits()
+  valid_udunits_prefixes()
+  if(interactive())
+    View(valid_udunits())
+}
 }

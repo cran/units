@@ -1,35 +1,24 @@
 #' @export
-c.units <- function(..., recursive = FALSE) {
+c.units <- function(..., recursive = FALSE, allow_mixed = units_options("allow_mixed")) {
   args <- list(...)
+  args[sapply(args, is.null)] <- NULL # remove NULLs
   u <- units(args[[1]])
-  if (.convert_to_first_arg(args))
-    do.call(c, c(args, recursive=recursive))
-  else structure(NextMethod(), units = u, class = "units")
+  if (length(args) == 1)
+  	.as.units(NextMethod(), u)
+  else if (.units_are_convertible(args[-1], u)) {
+    args <- set_units.mixed_units(args, as.character(u))
+    .as.units(do.call(c, lapply(args, drop_units)), u)
+  } else if (allow_mixed)
+    do.call(c, lapply(args, mixed_units))
+  else
+  	stop("units are not convertible, and cannot be mixed; try setting units_options(allow_mixed = TRUE)?")
 }
 
-.convert_to_first_arg <- function(dots, env.=parent.frame()) {
-  dots <- deparse(substitute(dots))
-  modified <- FALSE
-  u <- units(env.[[dots]][[1]])
-  for (i in seq_along(env.[[dots]])[-1]) {
-    if (!inherits(env.[[dots]][[i]], "units"))
-      stop(paste("argument", i, "is not of class units"))
-    if (units(env.[[dots]][[i]]) == u)
-      next
-    if (!ud_are_convertible(units(env.[[dots]][[i]]), u))
-      stop(paste("argument", i, 
-                 "has units that are not convertible to that of the first argument"))
-    units(env.[[dots]][[i]]) <- u
-    modified <- TRUE
-  }
-  modified
-}
-
-.as.units = function(x, value) {
-  x = unclass(x)
-  class(x) = "units"
-  attr(x, "units") = value
-  x
+.units_are_convertible = function(x, u) {
+	for (i in seq_along(x))
+		if (! ud_are_convertible(units(x[[i]]), u))
+			return(FALSE)
+	TRUE
 }
 
 #' @export
@@ -45,47 +34,6 @@ rep.units = function(x, ...) {
   .as.units(NextMethod(), u)
 }
 
-
-
-.parse_unit_with_implicit_exponents <- function(str) {
-  if (length(grep(c("[*/]"), str)) > 0)
-    stop("If 'implicit_exponents = TRUE', strings cannot contain `*' or `/'")
-  parse_one = function(str) {
-    r <- regexpr("[-0-9]+", str)
-    if (r == -1)
-      return(symbolic_unit(str))
-    power = as.integer(substr(str, r, nchar(str)))
-    u = if (power < 0) {
-	  subs = substr(str, 1, r-1) # word before power
-      1/symbolic_unit(subs) # word before power
-    } else {
-      subs = substr(str, 1, r-1)
-      symbolic_unit(subs)
-	}
-    if (abs(power) > 1) {
-      u0 = u
-      for (i in 2:abs(power))
-        u = u * u0
-      } 
-      return(u)
-    }
-  if (str == "1")
-     return(symbolic_unit("1"))
-  first = TRUE
-  while ((r <- regexpr("[ ]+", str)) != -1) {
-    this = substr(str, 1, r-1) # first word
-    u = if (first) {
-      first = FALSE
-      parse_one(this)
-    } else
-      u * parse_one(this)
-    str = substr(str, r+1, nchar(str))
-  }
-  if (first) # single unit
-    parse_one(str)
-  else
-    u * parse_one(str)
-}
 
 #' deparse unit to string in product power form (e.g. km m-2 s-1)
 #' 
@@ -163,7 +111,18 @@ seq.units = function(from, to, by = ((to - from)/(length.out - 1)),
 #' @param ... see \link[pillar]{type_sum}
 #' @export
 type_sum.units <- function(x, ...) {
-  paste0("[", as.character(units(x)), "]")
+  gr = units_options("group")
+  # see https://github.com/r-lib/pillar/issues/73 : currently the [ and ] mess up things.
+  structure(paste0(gr[1], as.character(units(x)), gr[2]),
+    class = "type_sum_units")
+}
+#' @export
+#' @name tibble
+#' @param width ignored
+format_type_sum.type_sum_units <- function(x, width, ...) {
+  if (! requireNamespace("pillar", quietly = TRUE))
+    stop("package pillar not available: install first?")
+  pillar::style_subtle(x)
 }
 
 #' pillar_shaft function for units
