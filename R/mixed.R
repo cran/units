@@ -24,7 +24,7 @@ mixed_units <- function(x, values, ...) UseMethod("mixed_units")
 mixed_units.units = function(x, values, ...) { 
 	stopifnot(missing(values))
 	u = as.character(units(x))
-	mixed_units(as.numeric(x), rep(u, length(x)))
+	mixed_units(unclass(x), rep(u, length(x)))
 }
 
 
@@ -89,7 +89,7 @@ print.mixed_units = function(x, ...) {
 	cat(paste(format(x, ...), collapse = ", "), "\n")
 }
 
-
+#' @name drop_units
 #' @export
 drop_units.mixed_units = function(x) {
 	sapply(x, drop_units)
