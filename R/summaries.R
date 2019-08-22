@@ -36,7 +36,11 @@ mean.units = function(x, ...) {
 }
 
 #' @export
-weighted.mean.units = mean.units
+weighted.mean.units = function(x, w, ...) {
+  if (!missing(w) && inherits(w, "units"))
+    w = drop_units(w)
+  .as.units(NextMethod(), units(x))
+}
 
 #' @export
 median.units = mean.units
