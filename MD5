@@ -1,6 +1,6 @@
-8b701e747f8c0f2fa12a7ad3fa39cdc5 *DESCRIPTION
+7431915230aad900aa6de17978ce31fc *DESCRIPTION
 8b4100577ed702507727f645aed31cc5 *NAMESPACE
-cfde21e853cdaa57ad499a913db5a54d *NEWS.md
+fa00cb744ded904dfbc3dd39fe9e3319 *NEWS.md
 47fed243a4b8257aeaffbb1cbe7d1a33 *R/RcppExports.R
 e51836208e0e9fc7f425d44e3d8b7f38 *R/arith.R
 d8ba3223925f48a8f6801cdec363e547 *R/conversion.R
@@ -31,10 +31,10 @@ a3d9c06754b67d2bddc9c636f142f34f *demo/ggforce.R
 cf1d077dd7e8d918645b6bdeb54ded66 *inst/CITATION
 b610d7909c7e2387274f747777e12b17 *inst/doc/measurement_units_in_R.R
 3821bde2663cf80383feb79125f253a9 *inst/doc/measurement_units_in_R.Rmd
-95172e442bbcf491d931e4efcfe95854 *inst/doc/measurement_units_in_R.html
+1e0f933a1d0fb9b2d43d83e265e926cc *inst/doc/measurement_units_in_R.html
 c76664843f4ba1b0671d13540043d688 *inst/doc/units.R
 dbfc5ec4aaaffc153d301008da35269c *inst/doc/units.Rmd
-12164e27e90157896a56acc5a353553a *inst/doc/units.html
+69a03bc49cb69c00abe2a12bdf16de45 *inst/doc/units.html
 26f28956899a13203f9d11baf0f03a1d *inst/share/udunits/udunits2-accepted.xml
 cf5342a71d0250353fda59ad83c35a9e *inst/share/udunits/udunits2-base.xml
 92b3d24d148513296f9f24449373ddfb *inst/share/udunits/udunits2-common.xml
@@ -74,7 +74,7 @@ dd5d621206dea23d9a9033e9d4d170d7 *src/RcppExports.cpp
 7ec60c876a36e4ab75f8e2879b342e9e *tests/testthat/test_arith.R
 b2248fa073e48e0161ad489fd39f5c48 *tests/testthat/test_conversion.R
 cf6e3f5b1bb44456fc24ff55b0a32d99 *tests/testthat/test_math.R
-47139ca57b88d2c3313f99decb646990 *tests/testthat/test_misc.R
+f0faba4b01d81920acb8942cd6a24f66 *tests/testthat/test_misc.R
 6314304f0cc412c2e6717f1ea8a5762d *tests/testthat/test_mixed.R
 8161c6dcadf9a2e7ccba6a9963f3dba5 *tests/testthat/test_summaries.R
 6ed86dcfb0f5468edbde970bcdd2bb5d *tests/testthat/test_symbolic_units.R
