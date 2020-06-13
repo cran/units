@@ -1,5 +1,26 @@
 context("Misc. utility functions")
 
+test_that("We can replace parts if they have an equivalent unit", {
+  x <- 1:4 * as_units("km")
+  y <- c(3000, 4000) * as_units("m")
+  z <- 5000 * as_units("m")
+  x[3:4] <- y
+  x[[5]] <- z
+
+  expect_length(x, 5)
+  expect_equal(as.numeric(x), 1:5)
+  expect_equal(as.character(units(x)), "km")
+})
+
+test_that("We can't replace parts if they have different unit", {
+  x <- 1:4 * as_units("km")
+  y <- c(3000, 4000) * as_units("s")
+  z <- 5000 * as_units("s")
+
+  expect_error(x[3:4] <- y)
+  expect_error(x[[5]] <- z)
+})
+
 test_that("We can concatenate units if they have the same unit", {
   x <- 1:4 * as_units("m")
   y <- 5:8 * as_units("m")
@@ -31,11 +52,6 @@ test_that("We can use diff on a units object", {
   x = 1:10 * as_units("m")
   y = rep(1,9) * as_units("m")
   expect_equal(diff(x), y)
-})
-
-test_that("type_sum is available for units objects", {
-  skip_if_not_installed("pillar")
-  expect_s3_class(pillar::type_sum(as_units("m")), "type_sum_units")
 })
 
 test_that("parse_unit works", {
@@ -109,11 +125,6 @@ test_that("seq works", {
   seq(set_units(10, m), by = set_units(1, m), length.out = 5)
   seq(set_units(10, m), set_units(19, m))
   seq(set_units(10, m), set_units(.02, km))
-})
-
-test_that("tibble printing works", {
-  skip_if_not_installed("tibble")
-  print(tibble::tibble(a = set_units(1/1:3, m/s)))
 })
 
 test_that("str works", {
