@@ -21,7 +21,7 @@ mixed_units <- function(x, values, ...) UseMethod("mixed_units")
 
 
 #' @export
-mixed_units.units = function(x, values, ...) { 
+mixed_units.units = function(x, values, ...) {
 	stopifnot(missing(values))
 	u = as.character(units(x))
 	mixed_units(unclass(x), rep(u, length(x)))
@@ -29,7 +29,7 @@ mixed_units.units = function(x, values, ...) {
 
 
 #' @export
-mixed_units.numeric = function(x, values, ...) { 
+mixed_units.numeric = function(x, values, ...) {
 	#stopifnot(length(x) == length(values), is.character(values), is.numeric(x))
 	stopifnot(is.character(values), is.numeric(x))
 	.as.mixed_units(mapply(set_units, x, values, mode = "standard", SIMPLIFY = FALSE))
@@ -51,6 +51,8 @@ format.mixed_units = function(x, ...) {
 `[.mixed_units` = function(x, i, ...) {
 	.as.mixed_units(unclass(x)[i])
 }
+
+#' @export
 c.mixed_units = function(...) {
 	args = list(...)
 	.as.mixed_units(do.call(c, lapply(args, unclass)))
@@ -60,8 +62,18 @@ c.mixed_units = function(...) {
 set_units.mixed_units = function(x, value, ..., mode = "standard") {
 	if (! is.character(value))
 		stop("use character string to denote target unit") # FIXME: rlang::quo stuff needed here?
-	#do.call(c, lapply(x, set_units, value = value, mode = mode, ...))
-	.as.mixed_units(mapply(set_units, x, value, mode = mode, SIMPLIFY = FALSE))
+
+  # conversion data frame and split
+  cv <- data.frame(
+    val=as.numeric(x), from=I(units(x)), to=value, stringsAsFactors=FALSE)
+  sp <- paste(cv$from, cv$to, sep=".")
+  sp <- factor(sp, levels=unique(sp))
+
+  # grouped conversion
+  do.call(c, unname(by(cv, sp, function(x) {
+    u <- set_units(x$val, x$from[[1]], mode="standard")
+    mixed_units(set_units(u, x$to[1], mode="standard"))
+  }, simplify=FALSE)))
 }
 
 #' @export
@@ -72,29 +84,33 @@ as_units.mixed_units = function(x, ...) {
 
 #' @export
 units.mixed_units = function(x) {
-	structure(lapply(x, units), class = "mixed_symbolic_units")
+  u = lapply(x, function(i) if (inherits(i, "units")) units(i) else NULL)
+	structure(u, class = "mixed_symbolic_units")
 }
 
 #' @export
 as.character.mixed_symbolic_units = function(x, ...) {
-	sapply(x, as.character)
+	sapply(x, function(i) if (!is.null(i)) as.character(i) else "NULL")
+}
+
+.cat_units_table <- function(x) {
+  cat("Mixed units: ")
+  if (!length(x)) return()
+
+  tbl = table(as.character(units(x)))
+  tbl = paste(names(tbl), " (", as.numeric(tbl), ")", sep = "")
+  cat(paste(tbl, collapse = ", "), "\n")
 }
 
 #' @export
 print.mixed_units = function(x, ...) {
-	cat("Mixed units: ")
-	tbl = table(as.character(units(x)))
-	tbl = paste(names(tbl), " (", as.numeric(tbl), ")", sep = "")
-	cat(paste(tbl, collapse = ", "), "\n")
+  .cat_units_table(x)
 	cat(paste(format(x, ...), collapse = ", "), "\n")
 }
 
 #' @export
 str.mixed_units = function(object, ...) {
-  tbl <- table(as.character(units(object)))
-  tbl <- paste(names(tbl), " (", as.numeric(tbl), ")", sep = "")
-  tbl_str <- paste(tbl, collapse = ", ")
-  cat("Mixed units:", tbl_str, "\n")
+  .cat_units_table(object)
   cat(capture.output(str(unclass(object), ...))[-1], sep="\n")
 }
 

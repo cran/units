@@ -5,11 +5,21 @@
 
 #' S3 Ops Group Generic Functions for units objects
 #'
-#' Ops functions for units objects, including comparison, product and divide, add, subtract
+#' Ops functions for units objects, including comparison, product and divide,
+#' add, subtract.
 #'
-#' @param e1 object of class \code{units}, 
+#' Users are advised against performing arithmetical operations with
+#' temperatures in different units. The \pkg{units} package ensure that results
+#' 1) are arithmetically correct, and 2) satisfy dimensional analysis, but could
+#' never ensure that results are physically meaningful. Temperature units are
+#' special because there is an absolute unit, Kelvin, and relative ones, Celsius
+#' and Fahrenheit degrees. Arithmetic operations between them are meaningless
+#' from the physical standpoint. Users are thus advised to convert all
+#' temperatures to Kelvin before operating.
+#'
+#' @param e1 object of class \code{units},
 #'        or something that can be coerced to it by \code{as_units(e1)}
-#' @param e2 object of class \code{units}, 
+#' @param e2 object of class \code{units},
 #'        or something that can be coerced to it by \code{as_units(e2)},
 #'        or in case of power a number (integer n or 1/n)
 #'
@@ -43,13 +53,13 @@ Ops.units <- function(e1, e2) {
 
   if (! any(eq, prd, pw, mod))
     stop(paste("operation", .Generic, "not allowed"))
-  
+
   if (eq) {
     if (!(inherits(e1, "units") && inherits(e2, "units")))
       stop("both operands of the expression should be \"units\" objects") # nocov
     units(e2) <- units(e1) # convert before we can compare; errors if unconvertible
   }
-  
+
   if (prd) {
     if (!inherits(e1, "units"))
       e1 <- set_units(e1, 1) # TODO: or warn?
@@ -59,7 +69,7 @@ Ops.units <- function(e1, e2) {
 
     ve1 <- unclass(e1) ; ue1 <- units(e1)
     ve2 <- unclass(e2) ; ue2 <- units(e2)
-    
+
     if (.Generic == "*") {
       numerator <- sort(c(ue1$numerator, ue2$numerator))
       denominator <- sort(c(ue1$denominator, ue2$denominator))
@@ -69,57 +79,62 @@ Ops.units <- function(e1, e2) {
     }
     return(.simplify_units(NextMethod(), .symbolic_units(numerator, denominator)))
 
-  } else if (pw) { # FIXME: I am not sure how to take powers of non-integers yet
+  } else if (pw) {
+    if (inherits(e1, "units") && identical(units(e1), set_units(1)))
+      e1 <- drop_units(e1)
 
-    if (identical(units(e1), set_units(1)))
-      return(set_units(unclass(e1) ^ e2, set_units(1)))
+    if (inherits(e2, "units")) {
+      if (inherits(e1, "units"))
+        stop("power operation only allowed with numeric power")
 
-    if (inherits(e2, "units"))
-      stop("power operation only allowed with numeric power")
+      # code to manage things like exp(log(...)) and 10^log10(...) follows
+      # this is not supported in udunits2, so we are on our own
+      u <- units(e2)
+      if (length(u$numerator) > 1 || !grepl("\\(re", u$numerator) || length(u$denominator))
+        stop("power operation only allowed with logarithmic unit")
 
-    if (length(e2) > 1L) {
-	  if (length(unique(e2)) == 1) # all identical
-	    e2 = e2[1]
-	  else # return mixed units:
-	    return(.as.mixed_units(mapply("^", e1, e2, SIMPLIFY=FALSE)))
+      sp <- strsplit(u$numerator, "\\(re ")[[1]]
+
+      # only works for the same base
+      type <- strsplit(sp[1], " ")[[1]]
+      fc <- if (length(type) == 1) 1 else as.numeric(type[1])
+      base <- switch(type[length(type)], lb=2, lg=10, ln=exp(1/fc))
+      if (!isTRUE(all.equal(e1, base)))
+        stop("wrong base in power operation")
+
+      # this is the next unit after "undoing" the outer logarithm
+      nxt_u <- paste(sp[-1], collapse="(re ")   # next unit
+      nxt_u <- substr(nxt_u, 1, nchar(nxt_u)-1) # remove last parenthesis
+      nxt_u <- sub("^1 ", "", nxt_u)            # remove leading one
+
+      if (length(sp) > 2) # another logarithm!
+        attr(e2, "units")$numerator <- nxt_u
+      else attr(e2, "units") <- units(as_units(nxt_u))
+      return(NextMethod())
     }
 
-    # if (round(e2) != e2)
-    #   stop("currently you can only take integer powers of units")
-    
+    if (length(e2) > 1L) {
+      if (length(unique(e2)) == 1) # all identical
+        e2 = e2[1]
+      else # return mixed units:
+        return(.as.mixed_units(mapply("^", e1, e2, SIMPLIFY=FALSE)))
+    }
+
     # we repeat each unit the number of times given by e2. They are already
     # sorted so they will remain sorted. We need to flip numerator and denominator
     # when the power is negative and we have a special case when it is zero where
     # units should be removed.
-    if (e2 == 0)
+    if (e2 == 0) {
       u <- set_units(1)
-    # else if (e2 > 0)
-    #   u <- .symbolic_units(rep(units(e1)$numerator, e2),
-    #                                        rep(units(e1)$denominator, e2))
-    # else
-    #   u <- .symbolic_units(rep(units(e1)$denominator, abs(e2)),
-    #                                        rep(units(e1)$numerator, abs(e2)))
-    else if (e2 >= 1) {
-      if (round(e2) != e2) {
-        stop("currently you can only take integer powers of units above 1")}
-      u <- .symbolic_units(rep(units(e1)$numerator, e2),
-                        rep(units(e1)$denominator, e2))
-    } else if (e2 <= -1) {
-      if (round(e2) != e2) {
-        stop("currently you can only take integer powers of units below -1")}
-      u <- .symbolic_units(rep(units(e1)$denominator, abs(e2)),
-                                           rep(units(e1)$numerator, abs(e2)))
-    } else { # -1 < e2 < 0 || 0 < e2 < 1
-      if ((1/e2) %% 1 != 0) {
-        stop("not a integer divisor")} # work on wording
+    } else {
       if (any((table(units(e1)$denominator)*e2) %% 1 != 0) ||
-          any((table(units(e1)$numerator)*e2)   %% 1 != 0)) {
-            stop("units not divisible")} # work on wording
-      if (e2 > 0) # 0 < e2 < 1
+          any((table(units(e1)$numerator)*e2)   %% 1 != 0))
+            stop("powers not divisible") # work on wording
+      if (e2 > 0)
         u <- .symbolic_units(
           rep(unique(units(e1)$numerator),table(units(e1)$numerator)*e2),
           rep(unique(units(e1)$denominator),table(units(e1)$denominator)*e2))
-      else # -1 < e2 < 0
+      else
         u <- .symbolic_units(
           rep(unique(units(e1)$denominator),table(units(e1)$denominator)*abs(e2)),
           rep(unique(units(e1)$numerator),table(units(e1)$numerator)*abs(e2)))
@@ -142,7 +157,7 @@ Ops.units <- function(e1, e2) {
 #' #' @details see \code{"\link[base]{\%*\%}"} for the base function, reimplemented
 #' #'   as default method
 #' `%*%` = function(x, y) UseMethod("%*%")
-#' 
+#'
 #' #' @name matmult
 #' #' @export
 #' `%*%.default` = function(x, y) {
@@ -151,7 +166,7 @@ Ops.units <- function(e1, e2) {
 #' 	else
 #' 		base::`%*%`(x, y)
 #' }
-#' 
+#'
 #' #' @name matmult
 #' #' @export
 #' #' @examples

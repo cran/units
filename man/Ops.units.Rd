@@ -7,10 +7,10 @@
 \method{Ops}{units}(e1, e2)
 }
 \arguments{
-\item{e1}{object of class \code{units}, 
+\item{e1}{object of class \code{units},
 or something that can be coerced to it by \code{as_units(e1)}}
 
-\item{e2}{object of class \code{units}, 
+\item{e2}{object of class \code{units},
 or something that can be coerced to it by \code{as_units(e2)},
 or in case of power a number (integer n or 1/n)}
 }
@@ -18,7 +18,18 @@ or in case of power a number (integer n or 1/n)}
 object of class \code{units}
 }
 \description{
-Ops functions for units objects, including comparison, product and divide, add, subtract
+Ops functions for units objects, including comparison, product and divide,
+add, subtract.
+}
+\details{
+Users are advised against performing arithmetical operations with
+temperatures in different units. The \pkg{units} package ensure that results
+1) are arithmetically correct, and 2) satisfy dimensional analysis, but could
+never ensure that results are physically meaningful. Temperature units are
+special because there is an absolute unit, Kelvin, and relative ones, Celsius
+and Fahrenheit degrees. Arithmetic operations between them are meaningless
+from the physical standpoint. Users are thus advised to convert all
+temperatures to Kelvin before operating.
 }
 \examples{
 a <- set_units(1:3, m/s)
