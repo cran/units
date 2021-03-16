@@ -52,6 +52,15 @@ if (!!window.navigator.userAgent.match("MSIE 8")) {
 !function(a){"use strict";a.matchMedia=a.matchMedia||function(a){var b,c=a.documentElement,d=c.firstElementChild||c.firstChild,e=a.createElement("body"),f=a.createElement("div");return f.id="mq-test-1",f.style.cssText="position:absolute;top:-100em",e.style.background="none",e.appendChild(f),function(a){return f.innerHTML='&shy;<style media="'+a+'"> #mq-test-1 { width: 42px; }</style>',c.insertBefore(e,d),b=42===f.offsetWidth,c.removeChild(e),{matches:b,media:a}}}(a.document)}(this),function(a){"use strict";function b(){u(!0)}var c={};a.respond=c,c.update=function(){};var d=[],e=function(){var b=!1;try{b=new a.XMLHttpRequest}catch(c){b=new a.ActiveXObject("Microsoft.XMLHTTP")}return function(){return b}}(),f=function(a,b){var c=e();c&&(c.open("GET",a,!0),c.onreadystatechange=function(){4!==c.readyState||200!==c.status&&304!==c.status||b(c.responseText)},4!==c.readyState&&c.send(null))};if(c.ajax=f,c.queue=d,c.regex={media:/@media[^\{]+\{([^\{\}]*\{[^\}\{]*\})+/gi,keyframes:/@(?:\-(?:o|moz|webkit)\-)?keyframes[^\{]+\{(?:[^\{\}]*\{[^\}\{]*\})+[^\}]*\}/gi,urls:/(url\()['"]?([^\/\)'"][^:\)'"]+)['"]?(\))/g,findStyles:/@media *([^\{]+)\{([\S\s]+?)$/,only:/(only\s+)?([a-zA-Z]+)\s?/,minw:/\([\s]*min\-width\s*:[\s]*([\s]*[0-9\.]+)(px|em)[\s]*\)/,maxw:/\([\s]*max\-width\s*:[\s]*([\s]*[0-9\.]+)(px|em)[\s]*\)/},c.mediaQueriesSupported=a.matchMedia&&null!==a.matchMedia("only all")&&a.matchMedia("only all").matches,!c.mediaQueriesSupported){var g,h,i,j=a.document,k=j.documentElement,l=[],m=[],n=[],o={},p=30,q=j.getElementsByTagName("head")[0]||k,r=j.getElementsByTagName("base")[0],s=q.getElementsByTagName("link"),t=function(){var a,b=j.createElement("div"),c=j.body,d=k.style.fontSize,e=c&&c.style.fontSize,f=!1;return b.style.cssText="position:absolute;font-size:1em;width:1em",c||(c=f=j.createElement("body"),c.style.background="none"),k.style.fontSize="100%",c.style.fontSize="100%",c.appendChild(b),f&&k.insertBefore(c,k.firstChild),a=b.offsetWidth,f?k.removeChild(c):c.removeChild(b),k.style.fontSize=d,e&&(c.style.fontSize=e),a=i=parseFloat(a)},u=function(b){var c="clientWidth",d=k[c],e="CSS1Compat"===j.compatMode&&d||j.body[c]||d,f={},o=s[s.length-1],r=(new Date).getTime();if(b&&g&&p>r-g)return a.clearTimeout(h),h=a.setTimeout(u,p),void 0;g=r;for(var v in l)if(l.hasOwnProperty(v)){var w=l[v],x=w.minw,y=w.maxw,z=null===x,A=null===y,B="em";x&&(x=parseFloat(x)*(x.indexOf(B)>-1?i||t():1)),y&&(y=parseFloat(y)*(y.indexOf(B)>-1?i||t():1)),w.hasquery&&(z&&A||!(z||e>=x)||!(A||y>=e))||(f[w.media]||(f[w.media]=[]),f[w.media].push(m[w.rules]))}for(var C in n)n.hasOwnProperty(C)&&n[C]&&n[C].parentNode===q&&q.removeChild(n[C]);n.length=0;for(var D in f)if(f.hasOwnProperty(D)){var E=j.createElement("style"),F=f[D].join("\n");E.type="text/css",E.media=D,q.insertBefore(E,o.nextSibling),E.styleSheet?E.styleSheet.cssText=F:E.appendChild(j.createTextNode(F)),n.push(E)}},v=function(a,b,d){var e=a.replace(c.regex.keyframes,"").match(c.regex.media),f=e&&e.length||0;b=b.substring(0,b.lastIndexOf("/"));var g=function(a){return a.replace(c.regex.urls,"$1"+b+"$2$3")},h=!f&&d;b.length&&(b+="/"),h&&(f=1);for(var i=0;f>i;i++){var j,k,n,o;h?(j=d,m.push(g(a))):(j=e[i].match(c.regex.findStyles)&&RegExp.$1,m.push(RegExp.$2&&g(RegExp.$2))),n=j.split(","),o=n.length;for(var p=0;o>p;p++)k=n[p],l.push({media:k.split("(")[0].match(c.regex.only)&&RegExp.$2||"all",rules:m.length-1,hasquery:k.indexOf("(")>-1,minw:k.match(c.regex.minw)&&parseFloat(RegExp.$1)+(RegExp.$2||""),maxw:k.match(c.regex.maxw)&&parseFloat(RegExp.$1)+(RegExp.$2||"")})}u()},w=function(){if(d.length){var b=d.shift();f(b.href,function(c){v(c,b.href,b.media),o[b.href]=!0,a.setTimeout(function(){w()},0)})}},x=function(){for(var b=0;b<s.length;b++){var c=s[b],e=c.href,f=c.media,g=c.rel&&"stylesheet"===c.rel.toLowerCase();e&&g&&!o[e]&&(c.styleSheet&&c.styleSheet.rawCssText?(v(c.styleSheet.rawCssText,e,f),o[e]=!0):(!/^([a-zA-Z:]*\/\/)/.test(e)&&!r||e.replace(RegExp.$1,"").split("/")[0]===a.location.host)&&("//"===e.substring(0,2)&&(e=a.location.protocol+e),d.push({href:e,media:f})))}w()};x(),c.update=x,c.getEmValue=t,a.addEventListener?a.addEventListener("resize",b,!1):a.attachEvent&&a.attachEvent("onresize",b)}}(this);
 };
 </script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script>
 
 /**
@@ -224,11 +233,6 @@ color: #d14;
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -241,32 +245,6 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
 
 
 
@@ -277,10 +255,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -297,6 +271,9 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
@@ -309,7 +286,6 @@ summary {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -373,7 +349,7 @@ summary {
 
 
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -432,8 +408,8 @@ d
 <pre class="r"><code>library(units)
 (a &lt;- set_units(runif(10),  m/s))
 ## Units: [m/s]
-##  [1] 0.832006439 0.359083909 0.603057928 0.576472604 0.613411909 0.830128625
-##  [7] 0.642478956 0.800919445 0.464359833 0.006960209</code></pre>
+##  [1] 0.21727701 0.81363388 0.02626741 0.80893976 0.79280107 0.21101022
+##  [7] 0.91412491 0.70404031 0.40425950 0.37314698</code></pre>
 <p>the result, e.g. </p>
 <pre class="r"><code>set_units(10, m/s)
 ## 10 [m/s]</code></pre>
@@ -445,8 +421,8 @@ d
 units(b) &lt;- make_units(km/h)
 b
 ## Units: [km/h]
-##  [1] 2.99522318 1.29270207 2.17100854 2.07530137 2.20828287 2.98846305
-##  [7] 2.31292424 2.88331000 1.67169540 0.02505675</code></pre>
+##  [1] 0.78219723 2.92908195 0.09456267 2.91218314 2.85408385 0.75963679
+##  [7] 3.29084968 2.53454511 1.45533419 1.34332912</code></pre>
 </div>
 </div>
 <div id="basic-manipulations" class="section level2">
@@ -456,25 +432,25 @@ b
 <p>Arithmetic operations verify units, and create new ones</p>
 <pre class="r"><code>a + a
 ## Units: [m/s]
-##  [1] 1.66401288 0.71816782 1.20611586 1.15294521 1.22682382 1.66025725
-##  [7] 1.28495791 1.60183889 0.92871967 0.01392042
+##  [1] 0.43455402 1.62726775 0.05253482 1.61787952 1.58560214 0.42202044
+##  [7] 1.82824982 1.40808062 0.80851899 0.74629396
 a * a
 ## Units: [m^2/s^2]
-##  [1] 6.922347e-01 1.289413e-01 3.636789e-01 3.323207e-01 3.762742e-01
-##  [6] 6.891135e-01 4.127792e-01 6.414720e-01 2.156301e-01 4.844451e-05
+##  [1] 0.0472092986 0.6620000848 0.0006899767 0.6543835385 0.6285335359
+##  [6] 0.0445253125 0.8356243532 0.4956727550 0.1634257408 0.1392386675
 a ^ 2
 ## Units: [m^2/s^2]
-##  [1] 6.922347e-01 1.289413e-01 3.636789e-01 3.323207e-01 3.762742e-01
-##  [6] 6.891135e-01 4.127792e-01 6.414720e-01 2.156301e-01 4.844451e-05
+##  [1] 0.0472092986 0.6620000848 0.0006899767 0.6543835385 0.6285335359
+##  [6] 0.0445253125 0.8356243532 0.4956727550 0.1634257408 0.1392386675
 a ** -2
 ## Units: [s^2/m^2]
-##  [1]     1.444597     7.755470     2.749679     3.009142     2.657637
-##  [6]     1.451140     2.422603     1.558915     4.637572 20642.175610</code></pre>
+##  [1]   21.182268    1.510574 1449.324289    1.528156    1.591005   22.459135
+##  [7]    1.196710    2.017460    6.118987    7.181913</code></pre>
 <p>and convert to the units of the first argument if necessary:</p>
 <pre class="r"><code>a + b # m/s + km/h -&gt; m/s
 ## Units: [m/s]
-##  [1] 1.66401288 0.71816782 1.20611586 1.15294521 1.22682382 1.66025725
-##  [7] 1.28495791 1.60183889 0.92871967 0.01392042</code></pre>
+##  [1] 0.43455402 1.62726775 0.05253482 1.61787952 1.58560214 0.42202044
+##  [7] 1.82824982 1.40808062 0.80851899 0.74629396</code></pre>
 <p>Currently, powers are only supported for integer powers, so using <code>a ** 2.5</code> would result in an error.</p>
 </div>
 <div id="unit-simplification" class="section level3">
@@ -483,20 +459,20 @@ a ** -2
 <pre class="r"><code>t &lt;- make_units(s)
 a * t
 ## Units: [m]
-##  [1] 0.832006439 0.359083909 0.603057928 0.576472604 0.613411909 0.830128625
-##  [7] 0.642478956 0.800919445 0.464359833 0.006960209</code></pre>
+##  [1] 0.21727701 0.81363388 0.02626741 0.80893976 0.79280107 0.21101022
+##  [7] 0.91412491 0.70404031 0.40425950 0.37314698</code></pre>
 <p>which also work when units need to be converted before they can be simplified:</p>
 <pre class="r"><code>t &lt;- make_units(min)
 a * t
 ## Units: [m]
-##  [1] 49.9203864 21.5450345 36.1834757 34.5883562 36.8047145 49.8077175
-##  [7] 38.5487374 48.0551667 27.8615900  0.4176125</code></pre>
+##  [1] 13.036621 48.818033  1.576044 48.536386 47.568064 12.660613 54.847495
+##  [8] 42.242418 24.255570 22.388819</code></pre>
 <p>Simplification to unit-less values gives the “1” as unit:</p>
 <pre class="r"><code>m &lt;- make_units(m)
 a * t / m
 ## Units: [1]
-##  [1] 49.9203864 21.5450345 36.1834757 34.5883562 36.8047145 49.8077175
-##  [7] 38.5487374 48.0551667 27.8615900  0.4176125</code></pre>
+##  [1] 13.036621 48.818033  1.576044 48.536386 47.568064 12.660613 54.847495
+##  [8] 42.242418 24.255570 22.388819</code></pre>
 <p>Allowed operations that require convertible units are <code>+</code>, <code>-</code>, <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. Operations that lead to new units are <code>*</code>, <code>/</code>, and the power operations <code>**</code> and <code>^</code>.</p>
 </div>
 <div id="mathematical-functions" class="section level3">
@@ -504,37 +480,37 @@ a * t / m
 <p>Mathematical operations allowed are: <code>abs</code>, <code>sign</code>, <code>floor</code>, <code>ceiling</code>, <code>trunc</code>, <code>round</code>, <code>signif</code>, <code>log</code>, <code>cumsum</code>, <code>cummax</code>, <code>cummin</code>.</p>
 <pre class="r"><code>signif(a ** 2 / 3, 3)
 ## Units: [m^2/s^2]
-##  [1] 2.31e-01 4.30e-02 1.21e-01 1.11e-01 1.25e-01 2.30e-01 1.38e-01 2.14e-01
-##  [9] 7.19e-02 1.61e-05
+##  [1] 0.01570 0.22100 0.00023 0.21800 0.21000 0.01480 0.27900 0.16500 0.05450
+## [10] 0.04640
 cumsum(a)
 ## Units: [m/s]
-##  [1] 0.8320064 1.1910903 1.7941483 2.3706209 2.9840328 3.8141614 4.4566404
-##  [8] 5.2575598 5.7219196 5.7288799
+##  [1] 0.217277 1.030911 1.057178 1.866118 2.658919 2.869929 3.784054 4.488095
+##  [9] 4.892354 5.265501
 log(a) # base defaults to exp(1)
 ## Units: [(ln(re 1 m.s-1))]
-##  [1] -0.1839151 -1.0241992 -0.5057420 -0.5508275 -0.4887186 -0.1861746
-##  [7] -0.4424212 -0.2219949 -0.7670955 -4.9675458
+##  [1] -1.52658220 -0.20624480 -3.63942636 -0.21203082 -0.23218295 -1.55584872
+##  [7] -0.08978805 -0.35091967 -0.90569829 -0.98578289
 log(a, base = 10)
 ## Units: [(lg(re 1 m.s-1))]
-##  [1] -0.07987331 -0.44480406 -0.21964097 -0.23922133 -0.21224780 -0.08085461
-##  [7] -0.19214109 -0.09641116 -0.33314535 -2.15737773
+##  [1] -0.66298623 -0.08957098 -1.58058279 -0.09208382 -0.10083577 -0.67569651
+##  [7] -0.03899446 -0.15240248 -0.39333977 -0.42812007
 log(a, base = 2)
 ## Units: [(lb(re 1 m.s-1))]
-##  [1] -0.2653334 -1.4776071 -0.7296315 -0.7946760 -0.7050719 -0.2685932
-##  [7] -0.6382789 -0.3202709 -1.1066849 -7.1666537</code></pre>
+##  [1] -2.2023926 -0.2975483 -5.2505824 -0.3058958 -0.3349692 -2.2446152
+##  [7] -0.1295368 -0.5062701 -1.3066464 -1.4221841</code></pre>
 </div>
 <div id="summary-functions" class="section level3">
 <h3>Summary functions</h3>
 <p>Summary functions <code>sum</code>, <code>min</code>, <code>max</code>, and <code>range</code> are allowed:</p>
 <pre class="r"><code>sum(a)
-## 5.72888 [m/s]
+## 5.265501 [m/s]
 min(a)
-## 0.006960209 [m/s]
+## 0.02626741 [m/s]
 max(a)
-## 0.8320064 [m/s]
+## 0.9141249 [m/s]
 range(a)
 ## Units: [m/s]
-## [1] 0.006960209 0.832006439
+## [1] 0.02626741 0.91412491
 make_units(min(m/s, km/h)) # converts to first unit:
 ## 0.2777778 [m/s]</code></pre>
 </div>
@@ -543,41 +519,41 @@ make_units(min(m/s, km/h)) # converts to first unit:
 <p>Following <code>difftime</code>, printing behaves differently for length-one vectors:</p>
 <pre class="r"><code>a
 ## Units: [m/s]
-##  [1] 0.832006439 0.359083909 0.603057928 0.576472604 0.613411909 0.830128625
-##  [7] 0.642478956 0.800919445 0.464359833 0.006960209
+##  [1] 0.21727701 0.81363388 0.02626741 0.80893976 0.79280107 0.21101022
+##  [7] 0.91412491 0.70404031 0.40425950 0.37314698
 a[1]
-## 0.8320064 [m/s]</code></pre>
+## 0.217277 [m/s]</code></pre>
 </div>
 <div id="subsetting" class="section level3">
 <h3>Subsetting</h3>
 <p>The usual subsetting rules work:</p>
 <pre class="r"><code>a[2:5]
 ## Units: [m/s]
-## [1] 0.3590839 0.6030579 0.5764726 0.6134119
+## [1] 0.81363388 0.02626741 0.80893976 0.79280107
 a[-(1:9)]
-## 0.006960209 [m/s]</code></pre>
+## 0.373147 [m/s]</code></pre>
 </div>
 <div id="concatenation" class="section level3">
 <h3>Concatenation</h3>
 <pre class="r"><code>c(a,a)
 ## Units: [m/s]
-##  [1] 0.832006439 0.359083909 0.603057928 0.576472604 0.613411909 0.830128625
-##  [7] 0.642478956 0.800919445 0.464359833 0.006960209 0.832006439 0.359083909
-## [13] 0.603057928 0.576472604 0.613411909 0.830128625 0.642478956 0.800919445
-## [19] 0.464359833 0.006960209</code></pre>
+##  [1] 0.21727701 0.81363388 0.02626741 0.80893976 0.79280107 0.21101022
+##  [7] 0.91412491 0.70404031 0.40425950 0.37314698 0.21727701 0.81363388
+## [13] 0.02626741 0.80893976 0.79280107 0.21101022 0.91412491 0.70404031
+## [19] 0.40425950 0.37314698</code></pre>
 <p>concatenation converts to the units of the first argument, if necessary:</p>
 <pre class="r"><code>c(a,b) # m/s, km/h -&gt; m/s
 ## Units: [m/s]
-##  [1] 0.832006439 0.359083909 0.603057928 0.576472604 0.613411909 0.830128625
-##  [7] 0.642478956 0.800919445 0.464359833 0.006960209 0.832006439 0.359083909
-## [13] 0.603057928 0.576472604 0.613411909 0.830128625 0.642478956 0.800919445
-## [19] 0.464359833 0.006960209
+##  [1] 0.21727701 0.81363388 0.02626741 0.80893976 0.79280107 0.21101022
+##  [7] 0.91412491 0.70404031 0.40425950 0.37314698 0.21727701 0.81363388
+## [13] 0.02626741 0.80893976 0.79280107 0.21101022 0.91412491 0.70404031
+## [19] 0.40425950 0.37314698
 c(b,a) # km/h, m/s -&gt; km/h
 ## Units: [km/h]
-##  [1] 2.99522318 1.29270207 2.17100854 2.07530137 2.20828287 2.98846305
-##  [7] 2.31292424 2.88331000 1.67169540 0.02505675 2.99522318 1.29270207
-## [13] 2.17100854 2.07530137 2.20828287 2.98846305 2.31292424 2.88331000
-## [19] 1.67169540 0.02505675</code></pre>
+##  [1] 0.78219723 2.92908195 0.09456267 2.91218314 2.85408385 0.75963679
+##  [7] 3.29084968 2.53454511 1.45533419 1.34332912 0.78219723 2.92908195
+## [13] 0.09456267 2.91218314 2.85408385 0.75963679 3.29084968 2.53454511
+## [19] 1.45533419 1.34332912</code></pre>
 </div>
 </div>
 <div id="conversion-tofrom-difftime" class="section level2">
@@ -726,7 +702,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
