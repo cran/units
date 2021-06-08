@@ -1,3 +1,10 @@
+# version 0.7-2
+
+* enhance `pillar` integration; #273, #275, #280 @krlmlr
+
+* new `unique` method for `units` and `mixed_units` objects; #283 addressing
+  #277 @lewinfox
+
 # version 0.7-1
 
 * allow longer units grouping; #270 addressing #269 @bart1

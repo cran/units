@@ -1,5 +1,3 @@
-context("Mixed Unit tests")
-
 test_that("mixed units work", {
    (m = c(set_units(1:3, km), set_units(4:6, g), allow_mixed = TRUE))
 
@@ -29,16 +27,18 @@ test_that("mixed units work", {
    expect_s3_class(m[1:3] / mixed_units(set_units(1, mm)), "mixed_units")
    expect_s3_class(m[1:3] + mixed_units(set_units(1, mm)), "mixed_units")
    expect_s3_class(m[1:3] - mixed_units(set_units(1, mm)), "mixed_units")
-   expect_is(m[1:3] == mixed_units(set_units(1, mm)), "logical")
-   expect_is(m[1:3] != mixed_units(set_units(1, mm)), "logical")
+   expect_type(m[1:3] == mixed_units(set_units(1, mm)), "logical")
+   expect_type(m[1:3] != mixed_units(set_units(1, mm)), "logical")
    expect_error(m[1:3] ^ mixed_units(set_units(1, mm)))
 
-# this breaks -- seems to be an s3 limitation:
-   expect_error(m[1:3] * set_units(1, mm))
+   # FIXME: Ops.mixed_units and Ops.units must be the same method
+   # to avoid the warning and the error.
+   # We can discriminate by switchpatching.
+   expect_error(expect_warning(m[1:3] * set_units(1, mm)))
 
    expect_s3_class(units(m), "mixed_symbolic_units")
-   expect_is(format(m), "character")
-   expect_is(as.character(units(m)), "character")
+   expect_type(format(m), "character")
+   expect_type(as.character(units(m)), "character")
    print(m)
    expect_equal(drop_units(m), sapply(m, as.numeric))
 
@@ -55,4 +55,15 @@ test_that("order is preserved", {
    m <- set_units(m, paste0("k", u), mode = "standard")
 
    expect_equal(as.numeric(m), x / 1000)
+})
+
+test_that("unique.mixed_units works", {
+   x <- c(set_units(c(1, 1, 2), kg), set_units(c(4, 4, 5), s), allow_mixed = TRUE)
+   expect_equal(unique(x), c(set_units(c(1, 2), kg), set_units(c(4, 5), s), allow_mixed = TRUE))
+
+   y <- c(set_units(c(1, 1, 1), m/s), set_units(c(1, 1, 1), kg/s), allow_mixed = TRUE)
+   expect_equal(unique(y), c(set_units(1, m/s), set_units(1, kg/s), allow_mixed = TRUE))
+
+   z <- c(set_units(c(1, 2), kg), set_units(c(3, 4), s), set_units(c(2, 3), kg), allow_mixed = TRUE)
+   expect_equal(unique(z), c(set_units(c(1, 2), kg), set_units(c(3, 4), s), set_units(3, kg), allow_mixed = TRUE))
 })

@@ -105,13 +105,13 @@ introduced in R.
 
 ## SI
 
-The [BIPM](http://www.bipm.org/) (Bureau International des Poids et
+The [BIPM](https://www.bipm.org/) (Bureau International des Poids et
 Mesures) is "_the intergovernmental organization through which
 Member States act together on matters related to measurement science
 and measurement standards.  Its recommended practical system of units
 of measurement is the International System of Units (Syst\`{e}me
 International d'Unit\'{e}s, with the international abbreviation SI)_
-(http://www.bipm.org/en/measurement-units/)". 
+(https://www.bipm.org/en/measurement-units/)". 
 
 @si describe the SI units, where, briefly, _SI units_
 

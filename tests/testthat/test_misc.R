@@ -1,5 +1,3 @@
-context("Misc. utility functions")
-
 test_that("We can replace parts if they have an equivalent unit", {
   x <- 1:4 * as_units("km")
   y <- c(3000, 4000) * as_units("m")
@@ -114,5 +112,20 @@ test_that("seq works", {
 })
 
 test_that("str works", {
-  str(set_units(1/1:3, m/s))
+  expect_snapshot({
+    str(set_units(1/1:3, m/s))
+  })
+})
+
+test_that("subsetting keeps pillar attribute (#275)", {
+  x <- set_units(1:3, m)
+  attr(x, "pillar") <- "bar"
+
+  expect_equal(attr(x[1:2], "pillar"), "bar")
+  expect_equal(attr(x[[1]], "pillar"), "bar")
+})
+
+test_that("unique.units works", {
+  x <- set_units(c(1, 1, 2, 3), kg)
+  expect_equal(unique(x), set_units(c(1, 2, 3), kg))
 })
