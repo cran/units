@@ -102,13 +102,26 @@ test_that("all.equal works", {
   expect_true(set_units(1, m/s) == set_units(3.6, km/h))
   expect_true(all.equal(set_units(3.6, km/h), set_units(1, m/s)))
   expect_false(set_units(3.6, km/h) == set_units(1, m/s))
+  expect_false(isTRUE(all.equal(set_units(1, m), 1)))
 })
 
 test_that("seq works", {
-  seq(to = set_units(10, m), by = set_units(1, m), length.out = 5)
-  seq(set_units(10, m), by = set_units(1, m), length.out = 5)
-  seq(set_units(10, m), set_units(19, m))
-  seq(set_units(10, m), set_units(.02, km))
+  expect_equal(
+    seq(to = set_units(10, m), by = set_units(1, m), length.out = 5),
+    set_units(seq(to = 10, by = 1, length.out = 5), m)
+  )
+  expect_equal(
+    seq(set_units(10, m), by = set_units(1, m), length.out = 5),
+    set_units(seq(10, by = 1, length.out = 5), m)
+  )
+  expect_equal(
+    seq(set_units(10, m), set_units(19, m)),
+    set_units(seq(10, 19), m)
+  )
+  expect_equal(
+    seq(set_units(10, m), set_units(.02, km)),
+    set_units(seq(10, 20), m)
+  )
 })
 
 test_that("str works", {
@@ -125,7 +138,19 @@ test_that("subsetting keeps pillar attribute (#275)", {
   expect_equal(attr(x[[1]], "pillar"), "bar")
 })
 
-test_that("unique.units works", {
-  x <- set_units(c(1, 1, 2, 3), kg)
-  expect_equal(unique(x), set_units(c(1, 2, 3), kg))
+test_that("duplicated-related methods work as expected", {
+  x <- set_units(1:4, m)
+  expect_equal(duplicated(x), duplicated(drop_units(x)))
+  expect_equal(anyDuplicated(x), anyDuplicated(drop_units(x)))
+  expect_equal(unique(x), x)
+
+  x <- set_units(rep(c(1, 2), 2), m)
+  expect_equal(duplicated(x), duplicated(drop_units(x)))
+  expect_equal(anyDuplicated(x), anyDuplicated(drop_units(x)))
+  expect_equal(unique(x), x[1:2])
+
+  x <- set_units(matrix(rep(c(1, 2), 2), 2, byrow=TRUE), m)
+  expect_equal(duplicated(x), duplicated(drop_units(x)))
+  expect_equal(anyDuplicated(x), anyDuplicated(drop_units(x)))
+  expect_equal(unique(x), x[1, , drop=FALSE])
 })

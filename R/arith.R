@@ -80,10 +80,9 @@ Ops.units <- function(e1, e2) {
     return(.simplify_units(NextMethod(), .symbolic_units(numerator, denominator)))
 
   } else if (pw) {
-    if (inherits(e1, "units") && identical(units(e1), set_units(1)))
-      e1 <- drop_units(e1)
-
     if (inherits(e2, "units")) {
+      if (inherits(e1, "units") && identical(units(e1), units(as_units(1))))
+        e1 <- drop_units(e1)
       if (inherits(e1, "units"))
         stop("power operation only allowed with numeric power")
 
@@ -107,10 +106,15 @@ Ops.units <- function(e1, e2) {
       nxt_u <- substr(nxt_u, 1, nchar(nxt_u)-1) # remove last parenthesis
       nxt_u <- sub("^1 ", "", nxt_u)            # remove leading one
 
-      if (length(sp) > 2) # another logarithm!
+      if (length(sp) > 2) { # another logarithm!
+        mult <- 1
         attr(e2, "units")$numerator <- nxt_u
-      else attr(e2, "units") <- units(as_units(nxt_u))
-      return(NextMethod())
+      } else {
+        nxt_u <- as_units(nxt_u)
+        mult <- drop_units(nxt_u)
+        attr(e2, "units") <- units(nxt_u)
+      }
+      return(mult * NextMethod())
     }
 
     if (length(e2) > 1L) {
@@ -125,7 +129,7 @@ Ops.units <- function(e1, e2) {
     # when the power is negative and we have a special case when it is zero where
     # units should be removed.
     if (e2 == 0) {
-      u <- set_units(1)
+      u <- units(as_units(1))
     } else {
       if (any((table(units(e1)$denominator)*e2) %% 1 != 0) ||
           any((table(units(e1)$numerator)*e2)   %% 1 != 0))

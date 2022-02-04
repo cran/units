@@ -71,8 +71,12 @@ deparse_unit = function(x) {
 #' @method all.equal units
 #' @export
 all.equal.units = function(target, current, ...) {
-  current = set_units(current, units(target), mode = "standard")
-  all.equal(unclass(target), unclass(current), ...)
+  if (inherits(current, "units")) {
+    units(current) <- units(target)
+    target <- drop_units(target)
+    current <- drop_units(current)
+  }
+  NextMethod()
 }
 
 #' seq method for units objects
@@ -115,6 +119,20 @@ str.units = function(object, ...) {
 }
 
 #' @export
+duplicated.units <- function(x, incomparables=FALSE, ...) {
+  if (is.null(dim(x)))
+    NextMethod() else duplicated.array(x, incomparables, ...)
+}
+
+#' @export
+anyDuplicated.units <- function(x, incomparables=FALSE, ...) {
+  if (is.null(dim(x)))
+    NextMethod() else anyDuplicated.array(x, incomparables, ...)
+}
+
+#' @export
 unique.units <- function(x, incomparables = FALSE, ...) {
-  .as.units(NextMethod(), units(x))
+  xx <- if (is.null(dim(x)))
+    NextMethod() else unique.array(x, incomparables, ...)
+  .as.units(xx, units(x))
 }
