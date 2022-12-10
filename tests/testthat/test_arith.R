@@ -130,22 +130,41 @@ test_that("we can compute powers if the result is an integer", {
 })
 
 test_that("we can undo logatithms", {
-  x <- set_units(1:5, m^2)
-  y <- set_units(1e6*x, km^2)
+  x <- set_units(1:5, cm^2)
+  y <- set_units(1e6*x, dam^2)
 
-  expect_equal(exp(10^log10(log(x))), x)
-  expect_equal(exp(set_units(10)^log10(log(x))), x)
+  expect_equal(exp(10^log10(log(x))), set_units(x, m^2))
+  expect_equal(exp(set_units(10)^log10(log(x))), set_units(x, m^2))
   expect_equal(exp(10^log10(log(y))), set_units(y, m^2))
-  expect_equal(expm1(3^log(log1p(x), base=3)), x)
+  expect_equal(expm1(3^log(log1p(x), base=3)), set_units(x, m^2))
   expect_equal(expm1(3^log(log1p(y), base=3)), set_units(y, m^2))
   expect_error(exp(log10(x)), "wrong base in power operation")
 })
 
-test_that("%*%, %/% and %% work", {
-  a = set_units(1:5, m)
-  expect_equal(a %/% set_units(2, m), set_units(c(0,1,1,2,2)))
-  expect_equal(a %% set_units(2, m), set_units(c(1,0,1,0,1), m))
-  mat = set_units(matrix(1:5, 1), m)
+test_that("%/% and %% work", {
+  x <- set_units(3, m^2)
+  y <- set_units(1.4, foot)
+
+  expect_true(all.equal(x, y * (x %/% y) + x %% y))
+
+  z <- set_units(drop_units(x) %% drop_units(set_units(y, m)), m^2)
+  expect_equal(x %% y, z)
+  expect_equal(x %% set_units(y, m), z)
+  expect_equal(x %% drop_units(set_units(y, m)), z)
+  expect_equal(x %% set_units(drop_units(set_units(y, m)), 1), z)
+  expect_equal(x %% set_units(drop_units(set_units(y, m)), 1), z)
+  expect_error(drop_units(x) %% set_units(y, m))
+
+  z <- set_units(drop_units(set_units(x, foot^2)) %% drop_units(y), foot^2)
+  expect_equal(set_units(x, foot^2) %% y, z)
+  expect_equal(set_units(x, foot^2) %% set_units(y, m), z)
+  expect_equal(set_units(x, foot^2) %% drop_units(y), z)
+  expect_equal(set_units(x, foot^2) %% set_units(drop_units(y), 1), z)
+  expect_error(drop_units(set_units(x, foot^2)) %% y)
+})
+
+test_that("%*% work", {
+  # mat = set_units(matrix(1:5, 1), m)
   # expect_equal(mat %*% t(mat), set_units(matrix(55), m^2))
   # expect_equal(t(mat) %*% mat, set_units(t(unclass(mat)) %*% unclass(mat), m^2))
 })

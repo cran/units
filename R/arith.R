@@ -40,15 +40,15 @@
 #' a %/% set_units(2)
 #' set_units(1:5, m^2) %/% set_units(2, m)
 #' a %% a
-#' a %% set_units(2 )
+#' a %% set_units(2)
 Ops.units <- function(e1, e2) {
   if (missing(e2))
     return(NextMethod())
 
   eq  <- .Generic %in% c("+", "-", "==", "!=", "<", ">", "<=", ">=") # requiring identical units
-  prd <- .Generic %in% c("*", "/", "%/%")                            # product-type
+  prd <- .Generic %in% c("*", "/", "%/%", "%%")                      # product-type
   pw  <- .Generic %in% c( "**", "^")                                 # power-type
-  mod <- .Generic == "%%"                                            # modulo
+  mod <- .Generic %in% c("%/%", "%%")                                # modulo-type
   pm  <- .Generic %in% c("+", "-")                                   # addition-type
 
   if (! any(eq, prd, pw, mod))
@@ -60,7 +60,15 @@ Ops.units <- function(e1, e2) {
     units(e2) <- units(e1) # convert before we can compare; errors if unconvertible
   }
 
-  if (prd) {
+  if (mod) {
+    div <- e1 / e2
+    int <- round(div)
+    if (.Generic == "%/%") {
+      return(int)
+    } else {
+      return(e1 - int*e2)
+    }
+  } else if (prd) {
     if (!inherits(e1, "units"))
       e1 <- set_units(e1, 1) # TODO: or warn?
 
@@ -104,14 +112,14 @@ Ops.units <- function(e1, e2) {
       # this is the next unit after "undoing" the outer logarithm
       nxt_u <- paste(sp[-1], collapse="(re ")   # next unit
       nxt_u <- substr(nxt_u, 1, nchar(nxt_u)-1) # remove last parenthesis
-      nxt_u <- sub("^1 ", "", nxt_u)            # remove leading one
 
       if (length(sp) > 2) { # another logarithm!
         mult <- 1
-        attr(e2, "units")$numerator <- nxt_u
+        attr(e2, "units")$numerator <- sub("^1 ", "", nxt_u)
       } else {
-        nxt_u <- as_units(nxt_u)
-        mult <- drop_units(nxt_u)
+        nxt_u <- strsplit(nxt_u, " ")[[1]]
+        mult <- as.numeric(nxt_u[1])
+        nxt_u <- as_units(nxt_u[2])
         attr(e2, "units") <- units(nxt_u)
       }
       return(mult * NextMethod())
@@ -143,7 +151,7 @@ Ops.units <- function(e1, e2) {
           rep(unique(units(e1)$denominator),table(units(e1)$denominator)*abs(e2)),
           rep(unique(units(e1)$numerator),table(units(e1)$numerator)*abs(e2)))
     }
-  } else # eq, plus/minus, mod:
+  } else # eq, plus/minus:
     u <- units(e1)
 
   if (eq && !pm) {

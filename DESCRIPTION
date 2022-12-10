@@ -1,5 +1,5 @@
 Package: units
-Version: 0.8-0
+Version: 0.8-1
 Title: Measurement Units for R Vectors
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
     person("Thomas", "Mailund", role = "aut", email = "mailund@birc.au.dk"),
@@ -26,13 +26,13 @@ Description: Support for measurement units in R vectors, matrices
     vignette; see 'citation("units")' for details.
 SystemRequirements: udunits-2
 License: GPL-2
-URL: https://github.com/r-quantities/units/
-BugReports: https://github.com/r-quantities/units/issues/
-RoxygenNote: 7.1.2
+URL: https://github.com/r-quantities/units
+BugReports: https://github.com/r-quantities/units/issues
+RoxygenNote: 7.2.2
 Encoding: UTF-8
 Config/testthat/edition: 3
 NeedsCompilation: yes
-Packaged: 2022-02-04 16:14:06 UTC; edzer
+Packaged: 2022-12-04 20:03:11 UTC; edzer
 Author: Edzer Pebesma [aut, cre] (<https://orcid.org/0000-0001-8049-7069>),
   Thomas Mailund [aut],
   Tomasz Kalinowski [aut],
@@ -41,4 +41,4 @@ Author: Edzer Pebesma [aut, cre] (<https://orcid.org/0000-0001-8049-7069>),
   Thomas Lin Pedersen [ctb]
 Maintainer: Edzer Pebesma <edzer.pebesma@uni-muenster.de>
 Repository: CRAN
-Date/Publication: 2022-02-05 00:50:02 UTC
+Date/Publication: 2022-12-10 15:10:02 UTC
