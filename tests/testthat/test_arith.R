@@ -15,6 +15,36 @@ test_that("we can compare vectors with equal units", {
   expect_false(any(x > y))
   expect_false(any(x != y))
   expect_true(all(x != z))
+
+  expect_error(x == set_units(1, "kg"))
+})
+
+test_that("comparing special values gives correct results", {
+  x <- c(-Inf, NaN, NA, Inf) * as_units("m")
+  expect_equal(x == x, drop_units(x) == drop_units(x))
+  expect_equal(x > x, drop_units(x) > drop_units(x))
+  expect_equal(x < x, drop_units(x) < drop_units(x))
+  expect_equal(x == rev(x), drop_units(x) == rev(drop_units(x)))
+  expect_equal(x > rev(x), drop_units(x) > rev(drop_units(x)))
+  expect_equal(x < rev(x), drop_units(x) < rev(drop_units(x)))
+})
+
+test_that("vectors are correctly recycled in comparisons", {
+  x <- 0:3 * as_units("m")
+  y <- 0:1 * as_units("m")
+  res <- drop_units(x) == drop_units(y)
+  expect_equal(x == y, res)
+  expect_equal(y == x, res)
+
+  y <- 0:2 * as_units("m")
+  expect_warning(res <- drop_units(x) == drop_units(y))
+  expect_warning(expect_equal(x == y, res))
+  expect_warning(expect_equal(y == x, res))
+})
+
+test_that("aliases are correctly handled in comparisons (#339)", {
+  expect_true(as_units("foot") == as_units("feet"))
+  expect_true(as_units("foot") == as_units("ft"))
 })
 
 test_that("we can scale units with scalars", {
@@ -139,6 +169,8 @@ test_that("we can undo logatithms", {
   expect_equal(expm1(3^log(log1p(x), base=3)), set_units(x, m^2))
   expect_equal(expm1(3^log(log1p(y), base=3)), set_units(y, m^2))
   expect_error(exp(log10(x)), "wrong base in power operation")
+  expect_error(exp(x), "only allowed with logarithmic unit")
+  expect_error(exp(set_units(1, 1)), "only allowed with logarithmic unit")
 })
 
 test_that("%/% and %% work", {
@@ -195,3 +227,26 @@ test_that("we obtain mixed units when taking powers of multiple integers", {
   p = 4:1
   expect_equal(a ^ p, c(set_units(1, m^4), set_units(8, m^3), set_units(9, m^2), set_units(4, m),  allow_mixed=TRUE))
 })
+
+test_that("identical units can always be divided and return unitless (#310)", {
+  x1 <- log(set_units(100, "g"))
+  x2 <- log(set_units(4, "g"))
+  expect_equal(
+    x1/x2,
+    set_units(log(100)/log(4), "")
+  )
+  expect_equal(
+    x1 %/% x2,
+    set_units(log(100) %/% log(4), "")
+  )
+})
+
+test_that("inverse units can always be multiplied and return unitless (related to #310)", {
+  x1 <- log(set_units(100, "g"))
+  x2 <- log(set_units(4, "g"))
+  expect_equal(
+    x1*(1/x2),
+    set_units(log(100)/log(4), "")
+  )
+})
+

@@ -45,22 +45,58 @@ Ops.units <- function(e1, e2) {
   if (missing(e2))
     return(NextMethod())
 
-  eq  <- .Generic %in% c("+", "-", "==", "!=", "<", ">", "<=", ">=") # requiring identical units
-  prd <- .Generic %in% c("*", "/", "%/%", "%%")                      # product-type
-  pw  <- .Generic %in% c( "**", "^")                                 # power-type
-  mod <- .Generic %in% c("%/%", "%%")                                # modulo-type
-  pm  <- .Generic %in% c("+", "-")                                   # addition-type
+  cmp <- .Generic %in% c("==", "!=", "<", ">", "<=", ">=") # comparison-type
+  div <- .Generic %in% c("/", "%/%")                       # division-type
+  mul <- .Generic %in% "*"                                 # multiplication-only
+  prd <- .Generic %in% c("*", "/", "%/%", "%%")            # product-type
+  pw  <- .Generic %in% c("**", "^")                        # power-type
+  mod <- .Generic %in% c("%/%", "%%")                      # modulo-type
+  pm  <- .Generic %in% c("+", "-")                         # addition-type
 
-  if (! any(eq, prd, pw, mod))
+  if (! any(cmp, pm, prd, pw, mod))
     stop(paste("operation", .Generic, "not allowed"))
 
-  if (eq) {
-    if (!(inherits(e1, "units") && inherits(e2, "units")))
-      stop("both operands of the expression should be \"units\" objects") # nocov
-    units(e2) <- units(e1) # convert before we can compare; errors if unconvertible
+  e1_inherits_units <- inherits(e1, "units")
+  e2_inherits_units <- inherits(e2, "units")
+  both_inherit_units <- e1_inherits_units && e2_inherits_units
+
+  if ((pm || cmp) && !both_inherit_units)
+    stop("both operands of the expression should be \"units\" objects") # nocov
+
+  if (cmp) {
+    if (!ud_are_convertible(units(e1), units(e2)))
+      stop("cannot compare non-convertible units")
+
+    if (length(e1) >= length(e2)) {
+      e1 <- ud_compare(e1, e2, as.character(units(e1)), as.character(units(e2)))
+      attr <- attributes(e2)
+      e2 <- rep(0, length(e2))
+      attributes(e2) <- attr
+    } else {
+      e2 <- ud_compare(e2, e1, as.character(units(e2)), as.character(units(e1)))
+      attr <- attributes(e1)
+      e1 <- rep(0, length(e1))
+      attributes(e1) <- attr
+    }
+    return(NextMethod())
   }
 
-  if (mod) {
+  identical_units <-
+    both_inherit_units &&
+    identical(units(e1), units(e2))
+
+  inverse_units <-
+    both_inherit_units &&
+    identical(units(e1)$numerator, units(e2)$denominator) &&
+    identical(units(e1)$denominator, units(e2)$numerator)
+
+  if ((div && identical_units) || (mul && inverse_units)) {
+    # Special cases for identical unit division and inverse unit multiplication
+    # which may not be otherwise divisible by udunits (see #310)
+    e1 <- drop_units(e1)
+    e2 <- drop_units(e2)
+    return(set_units(NextMethod(), 1))
+  } else if (mod) {
     div <- e1 / e2
     int <- round(div)
     if (.Generic == "%/%") {
@@ -69,10 +105,10 @@ Ops.units <- function(e1, e2) {
       return(e1 - int*e2)
     }
   } else if (prd) {
-    if (!inherits(e1, "units"))
+    if (!e1_inherits_units)
       e1 <- set_units(e1, 1) # TODO: or warn?
 
-    if (!inherits(e2, "units"))
+    if (!e2_inherits_units)
       e2 <- set_units(e2, 1) # TODO: or warn?
 
     ve1 <- unclass(e1) ; ue1 <- units(e1)
@@ -88,16 +124,18 @@ Ops.units <- function(e1, e2) {
     return(.simplify_units(NextMethod(), .symbolic_units(numerator, denominator)))
 
   } else if (pw) {
-    if (inherits(e2, "units")) {
-      if (inherits(e1, "units") && identical(units(e1), units(as_units(1))))
+    if (e2_inherits_units) {
+      if (e1_inherits_units && identical(units(e1), units(as_units(1)))) {
         e1 <- drop_units(e1)
-      if (inherits(e1, "units"))
+      } else if (e1_inherits_units) {
         stop("power operation only allowed with numeric power")
+      }
 
       # code to manage things like exp(log(...)) and 10^log10(...) follows
       # this is not supported in udunits2, so we are on our own
       u <- units(e2)
-      if (length(u$numerator) > 1 || !grepl("\\(re", u$numerator) || length(u$denominator))
+      invalid_lengths <- length(u$numerator) > 1 || length(u$denominator)
+      if (u == unitless || invalid_lengths || !grepl("\\(re", u$numerator))
         stop("power operation only allowed with logarithmic unit")
 
       sp <- strsplit(u$numerator, "\\(re ")[[1]]
@@ -151,14 +189,12 @@ Ops.units <- function(e1, e2) {
           rep(unique(units(e1)$denominator),table(units(e1)$denominator)*abs(e2)),
           rep(unique(units(e1)$numerator),table(units(e1)$numerator)*abs(e2)))
     }
-  } else # eq, plus/minus:
+  } else { # pm:
+    units(e2) <- units(e1)
     u <- units(e1)
+  }
 
-  if (eq && !pm) {
-    dimension = dim(structure(as.numeric(e1), dim = dim(e1)) == structure(as.numeric(e2), dim = dim(e2)))
-    structure(as.logical(NextMethod()), dim = dimension)
-  } else
-    .as.units(NextMethod(), u)
+  .as.units(NextMethod(), u)
 }
 
 #' #' matrix multiplication

@@ -160,9 +160,16 @@ test_that("a NULL value returns NULL", {
   expect_null(as_units(NULL))
 })
 
-#test_that("as.data.frame.units works", {
-#  expect_silent(as.data.frame(set_units(matrix(1:9,3), m)))
-#})
+test_that("as.data.frame.units works", {
+  x <- matrix(1:9, 3)
+
+  df1 <- as.data.frame(x)
+  for (col in names(df1))
+    df1[[col]] <- set_units(df1[[col]], m)
+  df2 <- as.data.frame(set_units(x, m))
+
+  expect_equal(df1, df2)
+})
 
 test_that("units.symbolic_units works", {
   m = set_units(1, m)
@@ -214,5 +221,23 @@ test_that("ud_are_convertible return the expected value", {
   expect_true(ud_are_convertible("m", "km"))
   expect_true(ud_are_convertible(units(x), "km"))
   expect_false(ud_are_convertible("s", "kg"))
+})
 
+test_that("set_units keeps names even with unit conversion (#305)", {
+  expect_named(set_units(c(a=1), "m"), "a")
+  expect_named(
+    set_units(set_units(c(a=1), "m"), "km"),
+    "a"
+  )
+})
+
+test_that("conversion to mixed_units", {
+  a <- set_units(1:3, m/s)
+  expect_s3_class(a, "units")
+  units(a) <- c("m/s", "km/h", "km/h")
+  expect_s3_class(a, "mixed_units")
+  expect_equal(
+    drop_units(a),
+    c(1, 0.002*3600, 0.003*3600)
+  )
 })

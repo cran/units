@@ -79,18 +79,63 @@ void ud_set_encoding(std::string enc_str) {
 }
 
 // [[Rcpp::export]]
+IntegerVector ud_compare(NumericVector x, NumericVector y,
+                         CharacterVector xn, CharacterVector yn)
+{
+  bool swapped = false;
+
+  if (y.size() > x.size()) {
+    std::swap(x, y);
+    std::swap(xn, yn);
+    swapped = true;
+  }
+
+  IntegerVector out(x.size());
+  for (std::string &attr : x.attributeNames())
+    out.attr(attr) = x.attr(attr);
+
+  ut_unit *ux = ut_parse(sys, ut_trim(xn[0], enc), enc);
+  ut_unit *uy = ut_parse(sys, ut_trim(yn[0], enc), enc);
+
+  if (ut_compare(ux, uy) != 0) {
+    NumericVector y_cv = clone(y);
+    cv_converter *cv = ut_get_converter(uy, ux);
+    cv_convert_doubles(cv, &(y_cv[0]), y_cv.size(), &(y_cv[0]));
+    cv_free(cv);
+    std::swap(y, y_cv);
+  }
+
+  ut_free(ux);
+  ut_free(uy);
+
+  for (int i=0, j=0; i < x.size(); i++, j++) {
+    if (j == y.size())
+      j = 0;
+    double diff = x[i] - y[j];
+    if (x[i] == y[j] || std::abs(diff) < std::numeric_limits<float>::epsilon())
+      out[i] = 0;
+    else if (ISNAN(diff))
+      out[i] = NA_INTEGER;
+    else out[i] = diff < 0 ? -1 : 1;
+  }
+
+  if (swapped)
+    out = -out;
+  return out;
+}
+
+// [[Rcpp::export]]
 NumericVector ud_convert(NumericVector val, CharacterVector from, CharacterVector to) {
   ut_unit *u_from = ut_parse(sys, ut_trim(from[0], enc), enc);
   ut_unit *u_to = ut_parse(sys, ut_trim(to[0], enc), enc);
 
   cv_converter *cv = ut_get_converter(u_from, u_to);
-  NumericVector out(val.size());
-  cv_convert_doubles(cv, &(val[0]), val.size(), &(out[0]));
+  cv_convert_doubles(cv, &(val[0]), val.size(), &(val[0]));
 
   cv_free(cv);
   ut_free(u_from);
   ut_free(u_to);
-  return out;
+  return val;
 }
 
 // [[Rcpp::export]]
