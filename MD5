@@ -1,6 +1,6 @@
-aba160b5f59259dd79153dff029fb8bc *DESCRIPTION
+c41543c422374fe1adb7d0d6f902feba *DESCRIPTION
 531a93ded0b75aa751f6536b7bdfe158 *NAMESPACE
-0835e4161b59cd2527edd172660bda40 *NEWS.md
+c01892a3e4c60a3f3fbc3eaf4547512e *NEWS.md
 ff2e951b0a2b987363f71ab3bf3e0b44 *R/RcppExports.R
 10f20146f5b5812939bbb89e1201dbaa *R/arith.R
 4c785f802eb3e840ab7f9b2c10626007 *R/conversion.R
@@ -21,9 +21,9 @@ d4f7fcd6e61bfbec1c5884ff6232ab8e *R/symbolic_units.R
 4c9de1fdfbb4fcfda5c24f075d40dab2 *R/udunits.R
 e479aaf8933a66ec9eb79cd38eb29df7 *R/user_conversion.R
 ec2f4c4b9549e0a46ec59f84b16bf1d6 *R/valid_udunits.R
-2c298424d3e43cd3b8ebb0c5fa033c78 *build/vignette.rds
+32184225b07c5b0a8ff7f4bc65620213 *build/vignette.rds
 5cc65e8e0f99d3c430cc7da84dfdfe26 *cleanup
-91af17290f73e399b52471e15d7d2147 *configure
+4afd4619bfd57917929cc22457c94f34 *configure
 b1e8639b41b801c4a9fe8ac0fa515f1a *configure.ac
 2fdd3ab2548ca877fa97e90a68b4949b *demo/00Index
 ef1d34304c55864aea013e1e2f45b747 *demo/cf.R
@@ -32,10 +32,10 @@ dac1de6634348193019b49a9cb4992c9 *demo/year.R
 cf1d077dd7e8d918645b6bdeb54ded66 *inst/CITATION
 a8cbf41fb72cc8e39982eb6cebda1a72 *inst/doc/measurement_units_in_R.R
 4238c780235319aa08111973a124b6bf *inst/doc/measurement_units_in_R.Rmd
-b34001336e2a88a7f38ca9add331c782 *inst/doc/measurement_units_in_R.html
+72947e07cd7b7e371ef29b3d3b434928 *inst/doc/measurement_units_in_R.html
 90dfc7639d320de0ddb8f1d79fa8f77e *inst/doc/units.R
 6eb53fcbcd2ed3e4b0d47443a37ee5ee *inst/doc/units.Rmd
-974c50512ec0f08ae144350d81008f05 *inst/doc/units.html
+a6251896e744e8bc8e39251b59621e9f *inst/doc/units.html
 26f28956899a13203f9d11baf0f03a1d *inst/share/udunits/udunits2-accepted.xml
 cf5342a71d0250353fda59ad83c35a9e *inst/share/udunits/udunits2-base.xml
 3048eb714b4ef1405b5e00e00f857626 *inst/share/udunits/udunits2-common.xml
@@ -66,7 +66,7 @@ b55ad112ba1e8094d3db1e00709d31b1 *man/units-defunct.Rd
 a8fb1c53c32f73f2820d185604413bdc *src/Makevars.ucrt
 786890c70741547342d383fb23705f8e *src/Makevars.win
 61ed7504114c305d0901832111777213 *src/RcppExports.cpp
-c710be172629c0b32258de08ffaeca64 *src/udunits.cpp
+9710dba34a1c2703d1412e759bff1234 *src/udunits.cpp
 303cf34dc97f3cb9280035eb0b23c752 *tests/testthat.R
 53ab204232ffe6eb8579aa6fb5a37058 *tests/testthat/_snaps/misc.md
 ac8cea54738f8d6b4875e9fdf639c827 *tests/testthat/_snaps/plot/ggplot2-automatic.svg
@@ -91,7 +91,7 @@ ae8a200825cf18189bf32d2440842296 *tests/testthat/test_arith.R
 8bcc12c73e723f47402ccdef3883bbdf *tests/testthat/test_conversion.R
 de1f22082aea2b73056de8e02707909c *tests/testthat/test_helpers.R
 5b438ea04b49163edd2780db5bfc5927 *tests/testthat/test_math.R
-d072619d98c90d94951e9af5d3e673b6 *tests/testthat/test_misc.R
+03adcbcb3c726074bde838dbd2af4c0f *tests/testthat/test_misc.R
 774eca85da196071b440f599194be828 *tests/testthat/test_mixed.R
 2b0a8c8558a3b6de2fda9dde7e5566dc *tests/testthat/test_plot.R
 96fed5db9c3985356cd6eb0429b38de3 *tests/testthat/test_summaries.R
