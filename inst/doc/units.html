@@ -408,8 +408,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">library</span>(units)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>(a &lt;-<span class="st"> </span><span class="kw">set_units</span>(<span class="kw">runif</span>(<span class="dv">10</span>),  m<span class="op">/</span>s))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="co">## Units: [m/s]</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="co">##  [1] 0.08207800 0.50778951 0.51771894 0.35030482 0.94065616 0.97227437</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="co">##  [7] 0.53968563 0.32321496 0.07407025 0.45797288</span></span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="co">##  [1] 0.8952217 0.5174261 0.1532732 0.6343891 0.1214279 0.9735305 0.9129069</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="co">##  [8] 0.5624314 0.1946815 0.1837322</span></span></code></pre></div>
 <p>the result, e.g. </p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">set_units</span>(<span class="dv">10</span>, m<span class="op">/</span>s)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="co">## 10 [m/s]</span></span></code></pre></div>
@@ -421,8 +421,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">units</span>(b) &lt;-<span class="st"> </span><span class="kw">make_units</span>(km<span class="op">/</span>h)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>b</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="co">## Units: [km/h]</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">##  [1] 0.2954808 1.8280422 1.8637882 1.2610973 3.3863622 3.5001877 1.9428683</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="co">##  [8] 1.1635739 0.2666529 1.6487024</span></span></code></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">##  [1] 3.2227982 1.8627339 0.5517834 2.2838008 0.4371403 3.5047100 3.2864648</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="co">##  [8] 2.0247532 0.7008533 0.6614361</span></span></code></pre></div>
 </div>
 </div>
 <div id="basic-manipulations" class="section level2">
@@ -432,25 +432,25 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Arithmetic operations verify units, and create new ones</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>a <span class="op">+</span><span class="st"> </span>a</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="co">## Units: [m/s]</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="co">##  [1] 0.1641560 1.0155790 1.0354379 0.7006096 1.8813123 1.9445487 1.0793713</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="co">##  [8] 0.6464299 0.1481405 0.9159458</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="co">##  [1] 1.7904434 1.0348522 0.3065463 1.2687782 0.2428557 1.9470611 1.8258138</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="co">##  [8] 1.1248629 0.3893629 0.3674645</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>a <span class="op">*</span><span class="st"> </span>a</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="co">## Units: [m^2/s^2]</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="co">##  [1] 0.006736798 0.257850182 0.268032901 0.122713464 0.884834019 0.945317452</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="co">##  [7] 0.291260583 0.104467909 0.005486402 0.209739155</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="co">##  [1] 0.80142191 0.26772975 0.02349266 0.40244955 0.01474473 0.94776172</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="co">##  [7] 0.83339899 0.31632913 0.03790088 0.03375754</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>a <span class="op">^</span><span class="st"> </span><span class="dv">2</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a><span class="co">## Units: [m^2/s^2]</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="co">##  [1] 0.006736798 0.257850182 0.268032901 0.122713464 0.884834019 0.945317452</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="co">##  [7] 0.291260583 0.104467909 0.005486402 0.209739155</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="co">##  [1] 0.80142191 0.26772975 0.02349266 0.40244955 0.01474473 0.94776172</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="co">##  [7] 0.83339899 0.31632913 0.03790088 0.03375754</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a>a <span class="op">**</span><span class="st"> </span><span class="dv">-2</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a><span class="co">## Units: [s^2/m^2]</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a><span class="co">##  [1] 148.438470   3.878221   3.730885   8.149065   1.130155   1.057846</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a><span class="co">##  [7]   3.433352   9.572318 182.268809   4.767827</span></span></code></pre></div>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a><span class="co">##  [1]  1.247782  3.735110 42.566484  2.484783 67.820853  1.055118  1.199905</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a><span class="co">##  [8]  3.161264 26.384615 29.623014</span></span></code></pre></div>
 <p>and convert to the units of the first argument if necessary:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>a <span class="op">+</span><span class="st"> </span>b <span class="co"># m/s + km/h -&gt; m/s</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="co">## Units: [m/s]</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="co">##  [1] 0.1641560 1.0155790 1.0354379 0.7006096 1.8813123 1.9445487 1.0793713</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="co">##  [8] 0.6464299 0.1481405 0.9159458</span></span></code></pre></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="co">##  [1] 1.7904434 1.0348522 0.3065463 1.2687782 0.2428557 1.9470611 1.8258138</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="co">##  [8] 1.1248629 0.3893629 0.3674645</span></span></code></pre></div>
 <p>Currently, powers are only supported for integer powers, so using <code>a ** 2.5</code> would result in an error.</p>
 </div>
 <div id="unit-simplification" class="section level3">
@@ -459,20 +459,20 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>t &lt;-<span class="st"> </span><span class="kw">make_units</span>(s)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>a <span class="op">*</span><span class="st"> </span>t</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="co">## Units: [m]</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="co">##  [1] 0.08207800 0.50778951 0.51771894 0.35030482 0.94065616 0.97227437</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="co">##  [7] 0.53968563 0.32321496 0.07407025 0.45797288</span></span></code></pre></div>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="co">##  [1] 0.8952217 0.5174261 0.1532732 0.6343891 0.1214279 0.9735305 0.9129069</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="co">##  [8] 0.5624314 0.1946815 0.1837322</span></span></code></pre></div>
 <p>which also work when units need to be converted before they can be simplified:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>t &lt;-<span class="st"> </span><span class="kw">make_units</span>(min)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>a <span class="op">*</span><span class="st"> </span>t</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="co">## Units: [m]</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a><span class="co">##  [1]  4.924680 30.467370 31.063136 21.018289 56.439370 58.336462 32.381138</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a><span class="co">##  [8] 19.392898  4.444215 27.478373</span></span></code></pre></div>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a><span class="co">##  [1] 53.713303 31.045565  9.196390 38.063347  7.285672 58.411833 54.774413</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a><span class="co">##  [8] 33.745887 11.680888 11.023935</span></span></code></pre></div>
 <p>Simplification to unit-less values gives the “1” as unit:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>m &lt;-<span class="st"> </span><span class="kw">make_units</span>(m)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>a <span class="op">*</span><span class="st"> </span>t <span class="op">/</span><span class="st"> </span>m</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="co">## Units: [1]</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a><span class="co">##  [1]  4.924680 30.467370 31.063136 21.018289 56.439370 58.336462 32.381138</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a><span class="co">##  [8] 19.392898  4.444215 27.478373</span></span></code></pre></div>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a><span class="co">##  [1] 53.713303 31.045565  9.196390 38.063347  7.285672 58.411833 54.774413</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a><span class="co">##  [8] 33.745887 11.680888 11.023935</span></span></code></pre></div>
 <p>Allowed operations that require convertible units are <code>+</code>, <code>-</code>, <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. Operations that lead to new units are <code>*</code>, <code>/</code>, and the power operations <code>**</code> and <code>^</code>.</p>
 </div>
 <div id="mathematical-functions" class="section level3">
@@ -480,37 +480,37 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Mathematical operations allowed are: <code>abs</code>, <code>sign</code>, <code>floor</code>, <code>ceiling</code>, <code>trunc</code>, <code>round</code>, <code>signif</code>, <code>log</code>, <code>cumsum</code>, <code>cummax</code>, <code>cummin</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">signif</span>(a <span class="op">**</span><span class="st"> </span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>, <span class="dv">3</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="co">## Units: [m^2/s^2]</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="co">##  [1] 0.00225 0.08600 0.08930 0.04090 0.29500 0.31500 0.09710 0.03480 0.00183</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="co">## [10] 0.06990</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="co">##  [1] 0.26700 0.08920 0.00783 0.13400 0.00491 0.31600 0.27800 0.10500 0.01260</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="co">## [10] 0.01130</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a><span class="kw">cumsum</span>(a)</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a><span class="co">## Units: [m/s]</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a><span class="co">##  [1] 0.0820780 0.5898675 1.1075864 1.4578913 2.3985474 3.3708218 3.9105074</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a><span class="co">##  [8] 4.2337224 4.3077926 4.7657655</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a><span class="co">##  [1] 0.8952217 1.4126478 1.5659210 2.2003101 2.3217379 3.2952685 4.2081754</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a><span class="co">##  [8] 4.7706068 4.9652883 5.1490205</span></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a><span class="kw">log</span>(a) <span class="co"># base defaults to exp(1)</span></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a><span class="co">## Units: [(ln(re 1 m.s-1))]</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a><span class="co">##  [1] -2.50008526 -0.67768828 -0.65832277 -1.04895160 -0.06117760 -0.02811724</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true"></a><span class="co">##  [7] -0.61676847 -1.12943767 -2.60274128 -0.78094532</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a><span class="co">##  [1] -0.11068387 -0.65888860 -1.87553359 -0.45509277 -2.10843486 -0.02682608</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true"></a><span class="co">##  [7] -0.09112139 -0.57548602 -1.63639053 -1.69427578</span></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true"></a><span class="kw">log</span>(a, <span class="dt">base =</span> <span class="dv">10</span>)</span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true"></a><span class="co">## Units: [(lg(re 1 m.s-1))]</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a><span class="co">##  [1] -1.08577323 -0.29431628 -0.28590595 -0.45555389 -0.02656909 -0.01221116</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true"></a><span class="co">##  [7] -0.26785914 -0.49050855 -1.13035618 -0.33916024</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a><span class="co">##  [1] -0.04806939 -0.28615168 -0.81453389 -0.19764428 -0.91568162 -0.01165042</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true"></a><span class="co">##  [7] -0.03957352 -0.24993040 -0.71067538 -0.73581462</span></span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true"></a><span class="kw">log</span>(a, <span class="dt">base =</span> <span class="dv">2</span>)</span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true"></a><span class="co">## Units: [(lb(re 1 m.s-1))]</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true"></a><span class="co">##  [1] -3.60686061 -0.97769752 -0.94975900 -1.51331728 -0.08826062 -0.04056460</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true"></a><span class="co">##  [7] -0.88980881 -1.62943413 -3.75496194 -1.12666594</span></span></code></pre></div>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true"></a><span class="co">##  [1] -0.15968307 -0.95057531 -2.70582301 -0.65656008 -3.04182851 -0.03870185</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true"></a><span class="co">##  [7] -0.13146037 -0.83025083 -2.36081250 -2.44432327</span></span></code></pre></div>
 </div>
 <div id="summary-functions" class="section level3">
 <h3>Summary functions</h3>
 <p>Summary functions <code>sum</code>, <code>min</code>, <code>max</code>, and <code>range</code> are allowed:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="kw">sum</span>(a)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="co">## 4.765766 [m/s]</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="co">## 5.149021 [m/s]</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="kw">min</span>(a)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="co">## 0.07407025 [m/s]</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="co">## 0.1214279 [m/s]</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a><span class="kw">max</span>(a)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a><span class="co">## 0.9722744 [m/s]</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a><span class="co">## 0.9735305 [m/s]</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a><span class="kw">range</span>(a)</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a><span class="co">## Units: [m/s]</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a><span class="co">## [1] 0.07407025 0.97227437</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a><span class="co">## [1] 0.1214279 0.9735305</span></span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true"></a><span class="kw">make_units</span>(<span class="kw">min</span>(m<span class="op">/</span>s, km<span class="op">/</span>h)) <span class="co"># converts to first unit:</span></span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true"></a><span class="co">## 0.2777778 [m/s]</span></span></code></pre></div>
 </div>
@@ -519,40 +519,38 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Following <code>difftime</code>, printing behaves differently for length-one vectors:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>a</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="co">## Units: [m/s]</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a><span class="co">##  [1] 0.08207800 0.50778951 0.51771894 0.35030482 0.94065616 0.97227437</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a><span class="co">##  [7] 0.53968563 0.32321496 0.07407025 0.45797288</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a><span class="co">##  [1] 0.8952217 0.5174261 0.1532732 0.6343891 0.1214279 0.9735305 0.9129069</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a><span class="co">##  [8] 0.5624314 0.1946815 0.1837322</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a>a[<span class="dv">1</span>]</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a><span class="co">## 0.082078 [m/s]</span></span></code></pre></div>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a><span class="co">## 0.8952217 [m/s]</span></span></code></pre></div>
 </div>
 <div id="subsetting" class="section level3">
 <h3>Subsetting</h3>
 <p>The usual subsetting rules work:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>a[<span class="dv">2</span><span class="op">:</span><span class="dv">5</span>]</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="co">## Units: [m/s]</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="co">## [1] 0.5077895 0.5177189 0.3503048 0.9406562</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="co">## [1] 0.5174261 0.1532732 0.6343891 0.1214279</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a>a[<span class="op">-</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>)]</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="co">## 0.4579729 [m/s]</span></span></code></pre></div>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="co">## 0.1837322 [m/s]</span></span></code></pre></div>
 </div>
 <div id="concatenation" class="section level3">
 <h3>Concatenation</h3>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="kw">c</span>(a,a)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a><span class="co">## Units: [m/s]</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a><span class="co">##  [1] 0.08207800 0.50778951 0.51771894 0.35030482 0.94065616 0.97227437</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a><span class="co">##  [7] 0.53968563 0.32321496 0.07407025 0.45797288 0.08207800 0.50778951</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a><span class="co">## [13] 0.51771894 0.35030482 0.94065616 0.97227437 0.53968563 0.32321496</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a><span class="co">## [19] 0.07407025 0.45797288</span></span></code></pre></div>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a><span class="co">##  [1] 0.8952217 0.5174261 0.1532732 0.6343891 0.1214279 0.9735305 0.9129069</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a><span class="co">##  [8] 0.5624314 0.1946815 0.1837322 0.8952217 0.5174261 0.1532732 0.6343891</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a><span class="co">## [15] 0.1214279 0.9735305 0.9129069 0.5624314 0.1946815 0.1837322</span></span></code></pre></div>
 <p>concatenation converts to the units of the first argument, if necessary:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">c</span>(a,b) <span class="co"># m/s, km/h -&gt; m/s</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a><span class="co">## Units: [m/s]</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a><span class="co">##  [1] 0.08207800 0.50778951 0.51771894 0.35030482 0.94065616 0.97227437</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a><span class="co">##  [7] 0.53968563 0.32321496 0.07407025 0.45797288 0.08207800 0.50778951</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a><span class="co">## [13] 0.51771894 0.35030482 0.94065616 0.97227437 0.53968563 0.32321496</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a><span class="co">## [19] 0.07407025 0.45797288</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a><span class="kw">c</span>(b,a) <span class="co"># km/h, m/s -&gt; km/h</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a><span class="co">## Units: [km/h]</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a><span class="co">##  [1] 0.2954808 1.8280422 1.8637882 1.2610973 3.3863622 3.5001877 1.9428683</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true"></a><span class="co">##  [8] 1.1635739 0.2666529 1.6487024 0.2954808 1.8280422 1.8637882 1.2610973</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true"></a><span class="co">## [15] 3.3863622 3.5001877 1.9428683 1.1635739 0.2666529 1.6487024</span></span></code></pre></div>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a><span class="co">##  [1] 0.8952217 0.5174261 0.1532732 0.6343891 0.1214279 0.9735305 0.9129069</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a><span class="co">##  [8] 0.5624314 0.1946815 0.1837322 0.8952217 0.5174261 0.1532732 0.6343891</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a><span class="co">## [15] 0.1214279 0.9735305 0.9129069 0.5624314 0.1946815 0.1837322</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a><span class="kw">c</span>(b,a) <span class="co"># km/h, m/s -&gt; km/h</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a><span class="co">## Units: [km/h]</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a><span class="co">##  [1] 3.2227982 1.8627339 0.5517834 2.2838008 0.4371403 3.5047100 3.2864648</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a><span class="co">##  [8] 2.0247532 0.7008533 0.6614361 3.2227982 1.8627339 0.5517834 2.2838008</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true"></a><span class="co">## [15] 0.4371403 3.5047100 3.2864648 2.0247532 0.7008533 0.6614361</span></span></code></pre></div>
 </div>
 </div>
 <div id="conversion-tofrom-difftime" class="section level2">
