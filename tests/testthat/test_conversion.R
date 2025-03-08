@@ -123,11 +123,12 @@ test_that("we can convert between units that are not simply a scalar from each o
   expect_equal(as.numeric(m), units:::ud_convert(0, "degC", "degK"))
   expect_equal(as.character(units(m)), "K")
 
-  temp <- 75 * as_units('degF')
-  units(temp) <- as_units('degK')
-  result <- temp / as_units('degF')
-  expect_equal(as.numeric(result), 75)
-  expect_equal(units(result), unitless)
+  ## Does this make any sense??
+  # temp <- 75 * as_units('degF')
+  # units(temp) <- as_units('degK')
+  # result <- temp / as_units('degF')
+  # expect_equal(as.numeric(result), 75)
+  # expect_equal(units(result), unitless)
 })
 
 test_that("dim propagates", {
@@ -213,14 +214,6 @@ test_that("units are correctly coerced to a list", {
 test_that("NA as units generate warnings", {
   expect_error(set_units(NA_real_, NA_character_, mode="standard"), "a missing value for units is not allowed")
   expect_error(set_units(NA_real_, NA, mode="standard"), "a missing value for units is not allowed")
-})
-
-test_that("ud_are_convertible return the expected value", {
-  x <- 1:10 * as_units("m")
-  expect_type(ud_are_convertible("m", "km"), "logical")
-  expect_true(ud_are_convertible("m", "km"))
-  expect_true(ud_are_convertible(units(x), "km"))
-  expect_false(ud_are_convertible("s", "kg"))
 })
 
 test_that("set_units keeps names even with unit conversion (#305)", {

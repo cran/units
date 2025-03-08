@@ -91,8 +91,8 @@
   if (identical(units(x), value)) # do nothing; possibly user-defined units:
     return(x)
 
-  str1 <- as.character(units(x))
-  str2 <- as.character(value)
+  str1 <- ud_char(units(x))
+  str2 <- ud_char(value)
 
   if (ud_are_convertible(str1, str2))
     .as.units(ud_convert(unclass(x), str1, str2), value, dim = dimx)
@@ -137,9 +137,7 @@ as.data.frame.units <- function(x, row.names = NULL, optional = FALSE, ...) {
 	df = as.data.frame(unclass(x), row.names, optional, ...)
 	if (!optional && ncol(df) == 1)
 	  colnames(df) <- deparse(substitute(x))
-	for (i in seq_along(df))
-		units(df[[i]]) = units(x)
-	df
+	dfapply(df, as_units, units(x))
 }
 
 #' @export
@@ -298,9 +296,5 @@ drop_units.units <- function(x) {
 #' @name drop_units
 #' @export
 drop_units.data.frame <- function(x) {
-  for (i in seq_along(x)) {
-    if (inherits(x[[i]], "units"))
-      x[[i]] <- drop_units(x[[i]])
-  }
-  x
+  dfapply(x, function(i) if (inherits(i, "units")) drop_units(i) else i)
 }

@@ -12,18 +12,28 @@ c.units <- function(..., recursive = FALSE, allow_mixed = units_options("allow_m
   args <- list(...)
   args[sapply(args, is.null)] <- NULL # remove NULLs
   u <- units(args[[1]])
+
   if (length(args) == 1)
-  	.as.units(NextMethod(), u)
-  else if (.units_are_convertible(args[-1], u)) {
-    args <- lapply(args, set_units, u, mode="standard")
-    .as.units(do.call(c, lapply(args, drop_units)), u)
-  } else if (allow_mixed)
-    do.call(c, lapply(args, mixed_units))
-  else
-  	stop("units are not convertible, and cannot be mixed; try setting units_options(allow_mixed = TRUE)?")
+    return(.as.units(NextMethod(), u))
+
+  dup <- vapply(args, function(x) identical(units(x), u), TRUE)
+
+  if (all(dup))
+    return(.as.units(do.call(c, lapply(args, drop_units)), u))
+
+  if (.units_are_convertible(args[!dup], u)) {
+    args[!dup] <- lapply(args[!dup], set_units, u, mode = "standard")
+    return(.as.units(do.call(c, lapply(args, drop_units)), u))
+  }
+
+  if (allow_mixed)
+    return(do.call(c, lapply(args, mixed_units)))
+
+  stop("units are not convertible, and cannot be mixed; try setting units_options(allow_mixed = TRUE)?")
 }
 
 .units_are_convertible = function(x, u) {
+  u <- ud_char(u)
 	for (i in seq_along(x))
 		if (! ud_are_convertible(units(x[[i]]), u))
 			return(FALSE)
@@ -50,21 +60,13 @@ rep.units = function(x, ...) {
 #' @param x object of class units
 #' @return length one character vector
 #' @examples
-#' u = as_units("kg m-2 s-1", implicit_exponents = TRUE)
+#' u = as_units("kg m-2 s-1")
 #' u
 #' deparse_unit(u)
 #' @export
 deparse_unit = function(x) {
   stopifnot(inherits(x, "units"))
-  u = units(x)
-  tn = table(u$numerator)
-  nm1 = names(tn)
-  vals1 = as.character(tn)
-  vals1[vals1 == "1"] = ""
-  td = - table(u$denominator)
-  nm2 = names(td)
-  vals2 = as.character(td)
-  paste(c(paste0(nm1, vals1), paste0(nm2, vals2)), collapse=" ")
+  as.character(units(x), neg_power=TRUE, prod_sep=" ")
 }
 # This should perhaps be an option in format.symbolic_units
 
@@ -136,3 +138,58 @@ unique.units <- function(x, incomparables = FALSE, ...) {
     NextMethod() else unique.array(x, incomparables, ...)
   .as.units(xx, units(x))
 }
+
+#' Combine R Objects by Rows or Columns
+#'
+#' S3 methods for \code{units} objects (see \code{\link[base]{cbind}}).
+#'
+#' @inheritParams base::cbind
+#' @name cbind.units
+#'
+#' @examples
+#' x <- set_units(1, m/s)
+#' y <- set_units(1:3, m/s)
+#' z <- set_units(8:10, m/s)
+#' (m <- cbind(x, y)) # the '1' (= shorter vector) is recycled
+#' (m <- cbind(m, z)[, c(1, 3, 2)]) # insert a column
+#' (m <- rbind(m, z)) # insert a row
+#' @export
+cbind.units <- function(..., deparse.level = 1) {
+  dots <- .deparse(list(...), substitute(list(...)), deparse.level)
+  units_first_arg <- units(dots[[1]])
+  class_first_arg <- class(dots[[1]])
+  dots <- lapply(dots, function(x) {
+    dots_unified <- set_units(x, units_first_arg, mode = "standard")
+    ret <- drop_units(dots_unified)
+    return(ret)
+  })
+  call <- as.character(match.call()[[1]])
+  value <- do.call(call, c(dots, deparse.level=deparse.level))
+  attr(value, "units") <- units_first_arg
+  class(value) <- class_first_arg
+  return(value)
+}
+
+.deparse <- function(dots, symarg, deparse.level) {
+  deparse.level <- as.integer(deparse.level)
+  if (identical(deparse.level, -1L)) deparse.level <- 0L # R Core's hack
+  stopifnot(0 <= deparse.level, deparse.level <= 2)
+
+  nm <- c( ## 0:
+    function(i) NULL,
+    ## 1:
+    function(i) if(is.symbol(s <- symarg[[i]])) deparse(s) else NULL,
+    ## 2:
+    function(i) deparse(symarg[[i]])[[1L]])[[ 1L + deparse.level ]]
+  Nms <- function(i) { if(!is.null(s <- names(symarg)[i]) && nzchar(s)) s else nm(i) }
+
+  symarg <- as.list(symarg)[-1L]
+  dnames <- sapply(seq_along(dots), Nms)
+  if (!all(sapply(dnames, is.null)))
+    names(dots) <- dnames
+  dots
+}
+
+#' @rdname cbind.units
+#' @export
+rbind.units <- cbind.units

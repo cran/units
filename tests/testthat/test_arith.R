@@ -131,6 +131,17 @@ test_that("we can convert units and simplify after multiplication", {
   expect_equal(as.character(units(ux/uy/uz)), "1/s")
 })
 
+test_that("inverse units are not simplified", {
+  x <- 1:4
+  s <- as_units("s")
+  Hz <- as_units("Hz")
+  ux <- x * s
+  uy <- x * Hz
+
+  expect_equal(as.character(units(ux/uy)), "s/Hz")
+  expect_equal(as.character(units(uy/ux)), "Hz/s")
+})
+
 test_that("unit one is handled correctly", {
   one <- set_units(1)
   onem <- set_units(1, m)
@@ -174,7 +185,7 @@ test_that("we can undo logatithms", {
 })
 
 test_that("%/% and %% work", {
-  x <- set_units(3, m^2)
+  x <- set_units(1:5, m^2)
   y <- set_units(1.4, foot)
 
   expect_true(all.equal(x, y * (x %/% y) + x %% y))
@@ -193,6 +204,8 @@ test_that("%/% and %% work", {
   expect_equal(set_units(x, foot^2) %% drop_units(y), z)
   expect_equal(set_units(x, foot^2) %% set_units(drop_units(y), 1), z)
   expect_error(drop_units(set_units(x, foot^2)) %% y)
+
+  expect_true(all(x %% y >= set_units(0, m^2)))
 })
 
 #test_that("%*% work", {

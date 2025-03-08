@@ -43,14 +43,15 @@ test_that("base plots work as expected", {
 
 test_that("ggplot2 plots work as expected", {
   skip_if_not_installed("vdiffr")
-  skip_if_not_installed("ggplot2")
+  skip_if_not_installed("ggplot2", "3.5.0")
   library(ggplot2)
 
   iris.u <- iris
   iris.u[1:4] <- lapply(iris.u[1:4], function(x) set_units(x, cm))
 
   p0 <- ggplot(iris.u) + aes(Sepal.Length, Sepal.Width, color=Species) +
-    geom_point() + theme_bw() + theme(legend.position=c(0.6, 0.8))
+    geom_point() + theme_bw() + theme(legend.position="inside",
+                                      legend.position.inside=c(0.6, 0.8))
 
   p1 <- p0 + scale_x_units(unit="m") + scale_y_units(unit="mm")
   p2 <- p0 + xlab("some other thing")
@@ -64,18 +65,37 @@ test_that("ggplot2 plots work as expected", {
 
 test_that("axis transformations do not affect displayed units", {
   skip_if_not_installed("vdiffr")
-  skip_if_not_installed("ggplot2")
+  skip_if_not_installed("ggplot2", "3.5.0")
   library(ggplot2)
 
   df <- data.frame(a = set_units(1:10, "m"))
 
   p0 <- ggplot(df, aes(y=a, x=a)) + geom_point()
-  p1 <- p0 + scale_x_units(trans='log10') + scale_y_units(trans='sqrt')
-  p2 <- p0 + scale_x_units(trans="log10", unit="mm")
+  p1 <- p0 + scale_x_units(transform='log10') + scale_y_units(transform='sqrt')
+  p2 <- p0 + scale_x_units(transform="log10", unit="mm")
 
   vdiffr::expect_doppelganger("ggplot2 default", p0)
   vdiffr::expect_doppelganger("ggplot2 transformed", p1)
   vdiffr::expect_doppelganger("ggplot2 trans + unit", p2)
+})
+
+test_that("axis limits can be changed", {
+  skip_if_not_installed("vdiffr")
+  skip_if_not_installed("ggplot2", "3.5.0")
+  library(ggplot2)
+
+  df <- data.frame(a = set_units(1:10, "m"))
+
+  p0 <- ggplot(df, aes(y=a, x=a)) + geom_point()
+  p1 <- p0 + scale_x_units(limits=c(0, 20))
+  p2 <- p0 + scale_x_units(limits=set_units(c(0, 20), "m"))
+  p3 <- p0 + xlim(set_units(c(0, 20), "m"))
+  p4 <- p0 + xlim(set_units(c(0, 20), "km"))
+
+  vdiffr::expect_doppelganger("ggplot2 limits via scale", p1)
+  vdiffr::expect_doppelganger("ggplot2 limits via scale with units", p2)
+  vdiffr::expect_doppelganger("ggplot2 limits via xlim", p3)
+  vdiffr::expect_doppelganger("ggplot2 limits other units", p4)
 })
 
 do.call(units_options, units:::.default_options)

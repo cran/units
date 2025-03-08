@@ -1,3 +1,36 @@
+# version 0.8-6
+
+* Add methods for `cbind` and `rbind`; fixes #311
+
+* Performance improvements in `data.frame` methods; suggested in #361 @grcatlin
+
+* Fix `weighted.mean.units` for unitless objects; #363
+
+* Fix incorrect use of `round()` in `%%` and `%/%` methods; #365 @UchidaMizuki
+
+* Fix `ggplot2` deprecation warnings; #367
+
+* Fix `hist()` error; #368
+
+* Add support for `lims()` in `ggplot2` scales; #370
+
+* Fix simplification of inverse units; #378
+
+* Replace call to `Rf_error()` with `Rcpp::stop()`; RcppCore/Rcpp#1247
+
+* Fix UBs in the C++ glue code; #380
+
+* Add support for `brew` path discovery in macOS; #384
+
+* Several performance improvements; #387, #388, #393, #400 addressing #386, #389
+
+* Improve `keep_units()` helper for more general usage scenarios;
+  #394 @d-morrison addressing #392
+
+* Add `ud_convert()` to convert units of a vector; #399 @dlebauer addressing #398
+
+* Fix `scale_units` for upcoming version of ggplot2; #401
+
 # version 0.8-5
 
 * avoid -Wformat-security warning on CRAN
