@@ -1,7 +1,7 @@
-f90411150d039d12cb213b0a56754900 *DESCRIPTION
+c8f08e79566370e0e12dc296516e68e2 *DESCRIPTION
 7aaf50f493edf4bf9b99fc3aa9096927 *NAMESPACE
-1fdc84588aa591048731a973372f9ccc *NEWS.md
-6c5114300d8dec92aadd1b36a47dc9a9 *R/RcppExports.R
+db42be7d1732b85ca93ade7384735dd4 *NEWS.md
+63f692d09836522679831c90a5e66964 *R/RcppExports.R
 72cafdd0fed4dbe330acf577d2d524a2 *R/arith.R
 6435b3c8650c9c6a4c46c02a23ab8d06 *R/conversion.R
 a3a92eeb9b9638d6cb972b622ada675c *R/database.R
@@ -23,8 +23,8 @@ e479aaf8933a66ec9eb79cd38eb29df7 *R/user_conversion.R
 ec2f4c4b9549e0a46ec59f84b16bf1d6 *R/valid_udunits.R
 79c1cc71d8e6647bc3227bcb564c5487 *build/vignette.rds
 5cc65e8e0f99d3c430cc7da84dfdfe26 *cleanup
-7933987f445b22bca26820d480ba4029 *configure
-c922634d26c6c088c1b4f8c34f5d313c *configure.ac
+fdd25b4a0a82dc98f6fac2275cdd2f26 *configure
+bde681c21fffe58b9639f2d8596c4fa0 *configure.ac
 2fdd3ab2548ca877fa97e90a68b4949b *demo/00Index
 ef1d34304c55864aea013e1e2f45b747 *demo/cf.R
 4b36c991d6d1cd78e88342bd2f2bd91b *demo/ggplot2.R
@@ -35,7 +35,7 @@ a3401de1acc3a0ee1e5e97383f41977a *inst/doc/measurement_units_in_R.R
 4010cc3fbb86fa2df28e1ebee588474f *inst/doc/measurement_units_in_R.html
 90dfc7639d320de0ddb8f1d79fa8f77e *inst/doc/units.R
 6eb53fcbcd2ed3e4b0d47443a37ee5ee *inst/doc/units.Rmd
-a43e893b74820a2c26cb374c1d6708de *inst/doc/units.html
+574859409a08ba9310bd38120e14bea3 *inst/doc/units.html
 26f28956899a13203f9d11baf0f03a1d *inst/share/udunits/udunits2-accepted.xml
 cf5342a71d0250353fda59ad83c35a9e *inst/share/udunits/udunits2-base.xml
 3048eb714b4ef1405b5e00e00f857626 *inst/share/udunits/udunits2-common.xml
@@ -63,11 +63,11 @@ b55ad112ba1e8094d3db1e00709d31b1 *man/units-defunct.Rd
 7fdadf5e1c4889f8cd82345dc5c4d527 *man/units.Rd
 5db6ed08e77370241c74bd3e2c68a1d8 *man/units_options.Rd
 617d3bcad1a5fa5a83b1b568ab75806e *man/valid_udunits.Rd
-5616720d7505dc0b4a29e283c2db1466 *src/Makevars.in
+20e6ca5d9179a57b501e8c8af255df4b *src/Makevars.in
 a8fb1c53c32f73f2820d185604413bdc *src/Makevars.ucrt
 786890c70741547342d383fb23705f8e *src/Makevars.win
-38cee55b9fe71c63c9fe13afc06465cf *src/RcppExports.cpp
-6ceb16cbbcefd2330362fe3fa7c0b98c *src/udunits.cpp
+84d8e071ca716c9ec01923dcd63d6197 *src/RcppExports.cpp
+61455c4e12b528e11ea2ab8f679cb15b *src/udunits.cpp
 303cf34dc97f3cb9280035eb0b23c752 *tests/testthat.R
 53ab204232ffe6eb8579aa6fb5a37058 *tests/testthat/_snaps/misc.md
 ac8cea54738f8d6b4875e9fdf639c827 *tests/testthat/_snaps/plot/ggplot2-automatic.svg

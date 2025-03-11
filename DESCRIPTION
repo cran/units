@@ -1,5 +1,5 @@
 Package: units
-Version: 0.8-6
+Version: 0.8-7
 Title: Measurement Units for R Vectors
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
     person("Thomas", "Mailund", role = "aut", email = "mailund@birc.au.dk"),
@@ -33,7 +33,7 @@ RoxygenNote: 7.3.2
 Encoding: UTF-8
 Config/testthat/edition: 3
 NeedsCompilation: yes
-Packaged: 2025-03-07 20:52:20 UTC; edzer
+Packaged: 2025-03-11 19:00:11 UTC; edzer
 Author: Edzer Pebesma [aut, cre] (<https://orcid.org/0000-0001-8049-7069>),
   Thomas Mailund [aut],
   Tomasz Kalinowski [aut],
@@ -42,4 +42,4 @@ Author: Edzer Pebesma [aut, cre] (<https://orcid.org/0000-0001-8049-7069>),
   Thomas Lin Pedersen [ctb]
 Maintainer: Edzer Pebesma <edzer.pebesma@uni-muenster.de>
 Repository: CRAN
-Date/Publication: 2025-03-08 00:40:02 UTC
+Date/Publication: 2025-03-11 23:40:02 UTC
