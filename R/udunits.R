@@ -44,6 +44,7 @@ ud_are_convertible <- function(from, to, ...) {
 #' ud_are_convertible("degF", "degC")
 #' ud_convert(32, "degF", "degC")
 ud_convert <- function(x, from, to) {
+  if (!length(x)) return(x)
   mapply(ud_convert_doubles, x, ud_char(from), ud_char(to))
 }
 
@@ -51,10 +52,11 @@ ud_char <- function(x) {
   if (is.character(x)) return(x)
   if (!inherits(x, "symbolic_units")) stop("not a unit")
 
+  # using * instead of space to workaround #414
   res <- if (length(x$numerator))
-    paste(x$numerator, collapse=" ") else "1"
+    paste(x$numerator, collapse="*") else "1"
   if (length(x$denominator))
-    res <- paste0(res, " (", paste(x$denominator, collapse=" "), ")-1")
+    res <- paste0(res, "*(", paste(x$denominator, collapse="*"), ")-1")
   res
 }
 

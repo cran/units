@@ -1,3 +1,19 @@
+# version 1.0-1
+
+* Add internal workaround for udunits2 bug with parsing of units that contain
+  "per", e.g. "percent" or "person"; #414
+
+* Update minimum Rcpp version; #421
+
+* Fix `print` methods for `units` and `mixed_units`, which now correctly return
+  invisibly the object being printed; #422
+
+* Wrap all pointers to avoid memory leaks derived from errors.
+
+* Check for exception propagation in udunits2; #423
+
+* Fix `ud_convert()` for empty input vectors; #428
+
 # version 1.0-0
 
 * Breaking change: a new tokenizer fixes longstanding issues with parsing

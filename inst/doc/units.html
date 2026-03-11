@@ -391,7 +391,7 @@ modified:</p>
 <p>We see here that the <code>units</code> method is used to retrieve
 and modify the unit of time differences.</p>
 <p>The <code>units</code> package generalizes this idea to other
-physical units, building upon the <a href="https://www.unidata.ucar.edu/software/udunits/">udunits2</a> C
+physical units, building upon the <a href="https://www.unidata.ucar.edu/software/udunits">udunits2</a> C
 library. The <code>udunits2</code> library provides the following
 operations:</p>
 <ul>
@@ -404,7 +404,7 @@ valid physical unit</li>
 <li>handle different character encodings (utf8, ascii, iso-8859-1 and
 latin1)</li>
 </ul>
-<p>The <code>units</code> R package uses the <a href="https://www.unidata.ucar.edu/software/udunits/">udunits2</a> C
+<p>The <code>units</code> R package uses the <a href="https://www.unidata.ucar.edu/software/udunits">udunits2</a> C
 library to extend R with functionality for manipulating numeric vectors
 that have physical measurement units associated with them, in a similar
 way as <code>difftime</code> objects behave.</p>
@@ -414,8 +414,8 @@ way as <code>difftime</code> objects behave.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(units)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>(a <span class="ot">&lt;-</span> <span class="fu">set_units</span>(<span class="fu">runif</span>(<span class="dv">10</span>),  m<span class="sc">/</span>s))</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="do">## Units: [m/s]</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="do">##  [1] 0.07506398 0.15119641 0.97304159 0.46543809 0.71133555 0.96022532</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="do">##  [7] 0.27296833 0.95485651 0.52155555 0.43468387</span></span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="do">##  [1] 0.55381844 0.02812965 0.33080525 0.62777998 0.43092858 0.21895528</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="do">##  [7] 0.74398914 0.26355383 0.63086172 0.67370789</span></span></code></pre></div>
 <p>the result, e.g. </p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">set_units</span>(<span class="dv">10</span>, m<span class="sc">/</span>s)</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="do">## 10 [m/s]</span></span></code></pre></div>
@@ -430,8 +430,8 @@ vector</p>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">units</span>(b) <span class="ot">&lt;-</span> <span class="fu">make_units</span>(km<span class="sc">/</span>h)</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>b</span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">## Units: [km/h]</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">##  [1] 0.2702303 0.5443071 3.5029497 1.6755771 2.5608080 3.4568112 0.9826860</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">##  [8] 3.4374834 1.8776000 1.5648619</span></span></code></pre></div>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">##  [1] 1.9937464 0.1012667 1.1908989 2.2600079 1.5513429 0.7882390 2.6783609</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">##  [8] 0.9487938 2.2711022 2.4253484</span></span></code></pre></div>
 </div>
 </div>
 <div id="basic-manipulations" class="section level2">
@@ -441,25 +441,25 @@ vector</p>
 <p>Arithmetic operations verify units, and create new ones</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>a <span class="sc">+</span> a</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="do">## Units: [m/s]</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="do">##  [1] 0.1501280 0.3023928 1.9460832 0.9308762 1.4226711 1.9204506 0.5459367</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="do">##  [8] 1.9097130 1.0431111 0.8693677</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="do">##  [1] 1.10763689 0.05625929 0.66161050 1.25555996 0.86185716 0.43791057</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="do">##  [7] 1.48797829 0.52710767 1.26172345 1.34741577</span></span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>a <span class="sc">*</span> a</span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="do">## Units: [m^2/s^2]</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="do">##  [1] 0.005634602 0.022860354 0.946809932 0.216632615 0.505998258 0.922032673</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="do">##  [7] 0.074511708 0.911750954 0.272020196 0.188950069</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="do">##  [1] 0.306714869 0.000791277 0.109432112 0.394107705 0.185699441 0.047941417</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="do">##  [7] 0.553519845 0.069460623 0.397986515 0.453882317</span></span>
 <span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>a <span class="sc">^</span> <span class="dv">2</span></span>
 <span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="do">## Units: [m^2/s^2]</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="do">##  [1] 0.005634602 0.022860354 0.946809932 0.216632615 0.505998258 0.922032673</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="do">##  [7] 0.074511708 0.911750954 0.272020196 0.188950069</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="do">##  [1] 0.306714869 0.000791277 0.109432112 0.394107705 0.185699441 0.047941417</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="do">##  [7] 0.553519845 0.069460623 0.397986515 0.453882317</span></span>
 <span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>a <span class="sc">**</span> <span class="sc">-</span><span class="dv">2</span></span>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="do">## Units: [s^2/m^2]</span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="do">##  [1] 177.474839  43.743855   1.056178   4.616110   1.976291   1.084560</span></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="do">##  [7]  13.420710   1.096791   3.676198   5.292403</span></span></code></pre></div>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="do">##  [1]    3.260357 1263.779979    9.138085    2.537377    5.385046   20.858791</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="do">##  [7]    1.806620   14.396646    2.512648    2.203214</span></span></code></pre></div>
 <p>and convert to the units of the first argument if necessary:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>a <span class="sc">+</span> b <span class="co"># m/s + km/h -&gt; m/s</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="do">## Units: [m/s]</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="do">##  [1] 0.1501280 0.3023928 1.9460832 0.9308762 1.4226711 1.9204506 0.5459367</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="do">##  [8] 1.9097130 1.0431111 0.8693677</span></span></code></pre></div>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="do">##  [1] 1.10763689 0.05625929 0.66161050 1.25555996 0.86185716 0.43791057</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="do">##  [7] 1.48797829 0.52710767 1.26172345 1.34741577</span></span></code></pre></div>
 <p>Currently, powers are only supported for integer powers, so using
 <code>a ** 2.5</code> would result in an error.</p>
 </div>
@@ -469,21 +469,21 @@ vector</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">make_units</span>(s)</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>a <span class="sc">*</span> t</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="do">## Units: [m]</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="do">##  [1] 0.07506398 0.15119641 0.97304159 0.46543809 0.71133555 0.96022532</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="do">##  [7] 0.27296833 0.95485651 0.52155555 0.43468387</span></span></code></pre></div>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="do">##  [1] 0.55381844 0.02812965 0.33080525 0.62777998 0.43092858 0.21895528</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="do">##  [7] 0.74398914 0.26355383 0.63086172 0.67370789</span></span></code></pre></div>
 <p>which also work when units need to be converted before they can be
 simplified:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">make_units</span>(min)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>a <span class="sc">*</span> t</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="do">## Units: [m]</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="do">##  [1]  4.503839  9.071784 58.382495 27.926285 42.680133 57.613519 16.378100</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="do">##  [8] 57.291391 31.293333 26.081032</span></span></code></pre></div>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="do">##  [1] 33.229107  1.687779 19.848315 37.666799 25.855715 13.137317 44.639349</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="do">##  [8] 15.813230 37.851703 40.422473</span></span></code></pre></div>
 <p>Simplification to unit-less values gives the “1” as unit:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">make_units</span>(m)</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>a <span class="sc">*</span> t <span class="sc">/</span> m</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="do">## Units: [1]</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="do">##  [1]  4.503839  9.071784 58.382495 27.926285 42.680133 57.613519 16.378100</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="do">##  [8] 57.291391 31.293333 26.081032</span></span></code></pre></div>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="do">##  [1] 33.229107  1.687779 19.848315 37.666799 25.855715 13.137317 44.639349</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="do">##  [8] 15.813230 37.851703 40.422473</span></span></code></pre></div>
 <p>Allowed operations that require convertible units are <code>+</code>,
 <code>-</code>, <code>==</code>, <code>!=</code>, <code>&lt;</code>,
 <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. Operations
@@ -499,38 +499,38 @@ operations <code>**</code> and <code>^</code>.</p>
 <code>cummin</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">signif</span>(a <span class="sc">**</span> <span class="dv">2</span> <span class="sc">/</span> <span class="dv">3</span>, <span class="dv">3</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="do">## Units: [m^2/s^2]</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="do">##  [1] 0.00188 0.00762 0.31600 0.07220 0.16900 0.30700 0.02480 0.30400 0.09070</span></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="do">## [10] 0.06300</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="do">##  [1] 0.102000 0.000264 0.036500 0.131000 0.061900 0.016000 0.185000 0.023200</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="do">##  [9] 0.133000 0.151000</span></span>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">cumsum</span>(a)</span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="do">## Units: [m/s]</span></span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="do">##  [1] 0.07506398 0.22626039 1.19930198 1.66474007 2.37607561 3.33630094</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="do">##  [7] 3.60926926 4.56412577 5.08568133 5.52036520</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="do">##  [1] 0.5538184 0.5819481 0.9127533 1.5405333 1.9714619 2.1904172 2.9344063</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="do">##  [8] 3.1979602 3.8288219 4.5025298</span></span>
 <span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="fu">log</span>(a) <span class="co"># base defaults to exp(1)</span></span>
 <span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="do">## Units: [ln(re 1 m.s-1)]</span></span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="do">##  [1] -2.58941442 -1.88917557 -0.02732846 -0.76477619 -0.34061103 -0.04058731</span></span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="do">##  [7] -1.29839951 -0.04619420 -0.65093948 -0.83313624</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="do">##  [1] -0.5909184 -3.5709312 -1.1062254 -0.4655655 -0.8418129 -1.5188877</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="do">##  [7] -0.2957288 -1.3334976 -0.4606686 -0.3949587</span></span>
 <span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="fu">log</span>(a, <span class="at">base =</span> <span class="dv">10</span>)</span>
 <span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="do">## Units: [lg(re 1 m.s-1)]</span></span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="do">##  [1] -1.12456840 -0.82045853 -0.01186860 -0.33213808 -0.14792549 -0.01762684</span></span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="do">##  [7] -0.56388774 -0.02006189 -0.28269943 -0.36182647</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="do">##  [1] -0.2566326 -1.5508357 -0.4804276 -0.2021925 -0.3655947 -0.6596446</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="do">##  [7] -0.1284334 -0.5791307 -0.2000658 -0.1715284</span></span>
 <span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="fu">log</span>(a, <span class="at">base =</span> <span class="dv">2</span>)</span>
 <span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="do">## Units: [lb(re 1 m.s-1)]</span></span>
-<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="do">##  [1] -3.73573535 -2.72550423 -0.03942663 -1.10333882 -0.49139784 -0.05855511</span></span>
-<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="do">##  [7] -1.87319453 -0.06664415 -0.93910716 -1.20196153</span></span></code></pre></div>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="do">##  [1] -0.8525150 -5.1517648 -1.5959460 -0.6716691 -1.2144793 -2.1912918</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="do">##  [7] -0.4266465 -1.9238304 -0.6646043 -0.5698049</span></span></code></pre></div>
 </div>
 <div id="summary-functions" class="section level3">
 <h3>Summary functions</h3>
 <p>Summary functions <code>sum</code>, <code>min</code>,
 <code>max</code>, and <code>range</code> are allowed:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">sum</span>(a)</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="do">## 5.520365 [m/s]</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="do">## 4.50253 [m/s]</span></span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">min</span>(a)</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="do">## 0.07506398 [m/s]</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="do">## 0.02812965 [m/s]</span></span>
 <span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">max</span>(a)</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="do">## 0.9730416 [m/s]</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="do">## 0.7439891 [m/s]</span></span>
 <span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="fu">range</span>(a)</span>
 <span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="do">## Units: [m/s]</span></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="do">## [1] 0.07506398 0.97304159</span></span></code></pre></div>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="do">## [1] 0.02812965 0.74398914</span></span></code></pre></div>
 </div>
 <div id="printing" class="section level3">
 <h3>Printing</h3>
@@ -538,41 +538,41 @@ operations <code>**</code> and <code>^</code>.</p>
 length-one vectors:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>a</span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="do">## Units: [m/s]</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="do">##  [1] 0.07506398 0.15119641 0.97304159 0.46543809 0.71133555 0.96022532</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="do">##  [7] 0.27296833 0.95485651 0.52155555 0.43468387</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="do">##  [1] 0.55381844 0.02812965 0.33080525 0.62777998 0.43092858 0.21895528</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="do">##  [7] 0.74398914 0.26355383 0.63086172 0.67370789</span></span>
 <span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>a[<span class="dv">1</span>]</span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="do">## 0.07506398 [m/s]</span></span></code></pre></div>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="do">## 0.5538184 [m/s]</span></span></code></pre></div>
 </div>
 <div id="subsetting" class="section level3">
 <h3>Subsetting</h3>
 <p>The usual subsetting rules work:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>a[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>]</span>
 <span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="do">## Units: [m/s]</span></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="do">## [1] 0.1511964 0.9730416 0.4654381 0.7113355</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="do">## [1] 0.02812965 0.33080525 0.62777998 0.43092858</span></span>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>a[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)]</span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="do">## 0.4346839 [m/s]</span></span></code></pre></div>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="do">## 0.6737079 [m/s]</span></span></code></pre></div>
 </div>
 <div id="concatenation" class="section level3">
 <h3>Concatenation</h3>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">c</span>(a,a)</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="do">## Units: [m/s]</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="do">##  [1] 0.07506398 0.15119641 0.97304159 0.46543809 0.71133555 0.96022532</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="do">##  [7] 0.27296833 0.95485651 0.52155555 0.43468387 0.07506398 0.15119641</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="do">## [13] 0.97304159 0.46543809 0.71133555 0.96022532 0.27296833 0.95485651</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="do">## [19] 0.52155555 0.43468387</span></span></code></pre></div>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="do">##  [1] 0.55381844 0.02812965 0.33080525 0.62777998 0.43092858 0.21895528</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="do">##  [7] 0.74398914 0.26355383 0.63086172 0.67370789 0.55381844 0.02812965</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="do">## [13] 0.33080525 0.62777998 0.43092858 0.21895528 0.74398914 0.26355383</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="do">## [19] 0.63086172 0.67370789</span></span></code></pre></div>
 <p>concatenation converts to the units of the first argument, if
 necessary:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">c</span>(a,b) <span class="co"># m/s, km/h -&gt; m/s</span></span>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="do">## Units: [m/s]</span></span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="do">##  [1] 0.07506398 0.15119641 0.97304159 0.46543809 0.71133555 0.96022532</span></span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="do">##  [7] 0.27296833 0.95485651 0.52155555 0.43468387 0.07506398 0.15119641</span></span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="do">## [13] 0.97304159 0.46543809 0.71133555 0.96022532 0.27296833 0.95485651</span></span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="do">## [19] 0.52155555 0.43468387</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="do">##  [1] 0.55381844 0.02812965 0.33080525 0.62777998 0.43092858 0.21895528</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="do">##  [7] 0.74398914 0.26355383 0.63086172 0.67370789 0.55381844 0.02812965</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="do">## [13] 0.33080525 0.62777998 0.43092858 0.21895528 0.74398914 0.26355383</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="do">## [19] 0.63086172 0.67370789</span></span>
 <span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">c</span>(b,a) <span class="co"># km/h, m/s -&gt; km/h</span></span>
 <span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="do">## Units: [km/h]</span></span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="do">##  [1] 0.2702303 0.5443071 3.5029497 1.6755771 2.5608080 3.4568112 0.9826860</span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="do">##  [8] 3.4374834 1.8776000 1.5648619 0.2702303 0.5443071 3.5029497 1.6755771</span></span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="do">## [15] 2.5608080 3.4568112 0.9826860 3.4374834 1.8776000 1.5648619</span></span></code></pre></div>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="do">##  [1] 1.9937464 0.1012667 1.1908989 2.2600079 1.5513429 0.7882390 2.6783609</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="do">##  [8] 0.9487938 2.2711022 2.4253484 1.9937464 0.1012667 1.1908989 2.2600079</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="do">## [15] 1.5513429 0.7882390 2.6783609 0.9487938 2.2711022 2.4253484</span></span></code></pre></div>
 </div>
 </div>
 <div id="conversion-tofrom-difftime" class="section level2">
